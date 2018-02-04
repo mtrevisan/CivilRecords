@@ -256,7 +256,7 @@ public abstract class AbstractCrawler{
 	}
 
 	private byte[] getRawImage(String url) throws URISyntaxException, IOException{
-		return HttpUtils.getRequest(url)
+		return HttpUtils.getRequestAsContent(url)
 			.asBytes();
 	}
 

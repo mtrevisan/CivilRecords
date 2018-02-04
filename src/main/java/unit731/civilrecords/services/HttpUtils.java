@@ -50,7 +50,7 @@ public class HttpUtils{
 		return url;
 	}
 
-	public static Content getRequest(String url) throws IOException{
+	public static Content getRequestAsContent(String url) throws IOException{
 		try{
 			return Request.Get(url)
 				.connectTimeout(CONNECT_TIMEOUT)

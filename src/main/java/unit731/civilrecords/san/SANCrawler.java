@@ -33,7 +33,7 @@ public class SANCrawler extends AbstractCrawler{
 		String nextURL = null;
 		while(!shutdown){
 			try{
-				String content = HttpUtils.getRequest(url)
+				String content = HttpUtils.getRequestAsContent(url)
 					.asString(StandardCharsets.UTF_8);
 				Element doc = Jsoup.parse(content);
 
