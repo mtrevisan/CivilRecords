@@ -25,8 +25,7 @@ import unit731.civilrecords.services.HttpUtils;
 public class FSCrawler extends AbstractCrawler{
 
 	protected static final String URL_FAMILYSEARCH = "https://www.familysearch.org";
-//	protected static final String URL_FAMILYSEARCH_PRE_LOGIN = "https://www.familysearch.org/auth/familysearch/login";
-	protected static final String URL_FAMILYSEARCH_PRE_LOGIN = "https://ident.familysearch.org/cis-web/oauth2/v3/authorization?client_secret=Z6RMduQXE0OUiK%2BcXIqoc3Z%2FBqVIMa1nRDPjRAou%2Fs1Z2SMI%2Fh%2B6ThGXlI6OJusIGINNyxE4C3Lm0frEq4usB0Knw1noogFdy3PCMaSq2k2Pz6U8Xg8wLMrEXHfJKqf8FaGuplTzycUmGm3VYrlA5EllRv7co5anb7E90tEAq2efHWSATI4kxN0E%2Bz40FaRdsw6hll2AWdTMmH4einoR%2BWZAssct0sIQbnK0N1g%2Bv5Y0aGTkIjlo6TLtmqL3Qo4%2FvCZzeEKIxLCpfuRtvshdMZoO5QHzSqcaw3wUBHjpg3Y910ZymcMJfFE8UkzgwbPq6T%2FCwLHaJNxuk3Ux9dYFlw%3D%3D&response_type=code&redirect_uri=https%3A%2F%2Fwww.familysearch.org%2Fauth%2Ffamilysearch%2Fcallback&state=%2F&client_id=3Z3L-Z4GK-J7ZS-YT3Z-Q4KY-YN66-ZX5K-176R";
+	protected static final String URL_FAMILYSEARCH_PRE_LOGIN = "https://www.familysearch.org/auth/familysearch/login?ldsauth=false";
 	protected static final String URL_FAMILYSEARCH_LOGIN = "https://ident.familysearch.org/cis-web/oauth2/v3/authorization";
 
 	protected List<String> urls;
@@ -41,7 +40,6 @@ public class FSCrawler extends AbstractCrawler{
 
 	@Override
 	protected void login(String username, String password) throws IOException{
-//		Content cn = HttpUtils.getRequestAsContent(URL_FAMILYSEARCH_PRE_LOGIN);
 		String preLoginContent = HttpUtils.getRequestAsContent(URL_FAMILYSEARCH_PRE_LOGIN)
 			.asString(StandardCharsets.UTF_8);
 		Element doc = Jsoup.parse(preLoginContent);
