@@ -14,9 +14,12 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.fluent.Content;
+import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ContentType;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.util.EntityUtils;
 
 
@@ -68,12 +71,20 @@ public class HttpUtils{
 
 	public static Content postWithBodyAsRawRequestAsContent(String url, String body) throws IOException{
 		try{
-			return Request.Post(url)
+			DefaultHttpClient client = new DefaultHttpClient();
+			client.setRedirectStrategy(new LaxRedirectStrategy());
+			Executor exec = Executor.newInstance(client);
+			return exec.execute(Request.Post(url)
 				.connectTimeout(CONNECT_TIMEOUT)
 				.socketTimeout(SOCKET_TIMEOUT)
-				.bodyString(body, ContentType.APPLICATION_FORM_URLENCODED.withCharset(CHARSET_DEFAULT))
-				.execute()
+				.bodyString(body, ContentType.APPLICATION_FORM_URLENCODED.withCharset(CHARSET_DEFAULT)))
 				.returnContent();
+//			return Request.Post(url)
+//				.connectTimeout(CONNECT_TIMEOUT)
+//				.socketTimeout(SOCKET_TIMEOUT)
+//				.bodyString(body, ContentType.APPLICATION_FORM_URLENCODED.withCharset(CHARSET_DEFAULT))
+//				.execute()
+//				.returnContent();
 		}
 		catch(IOException e){
 			throw e;
