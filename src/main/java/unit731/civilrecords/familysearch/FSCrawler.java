@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.http.client.fluent.Content;
 
 import unit731.civilrecords.services.AbstractCrawler;
 import unit731.civilrecords.services.HttpUtils;
@@ -30,6 +31,15 @@ public class FSCrawler extends AbstractCrawler{
 
 	public FSCrawler(){
 		super(URL_FAMILYSEARCH + "/ark:/", AbstractCrawler.WAIT_TIME);
+	}
+
+	@Override
+	protected void login(String username, String password) throws IOException{
+		String loginUrl = "https://ident.familysearch.org/cis-web/oauth2/v3/authorization";
+		String body = "{\"userName\":\"" + username + "\",\"password\":\"" + password + "\",\"privateComputer\":\"on\",\"params\":\"EzMupujcElotrYrj8jvzJLSgz6MVggBAzR8PrLNVn858Oave6sP6_yMSU91n_FwuMS4A_6lp-9bZ_zjPaPB4V5M0JaOfuIfKwEIh6R5kuvUaImaxTvd7_0wPSHqvcsZcsDvoAk34vowAfqOS9nnoTOmawp9E7mEqFEjZAnWvwAJ4a-8g-nstMTV3uoET9Lw9wO3sUD4iLv6bTrM18QSZmCqQdIcPl2A9JW4w709GR1kZmBhe7jt9helhhBddCVLx-7-5d6114F8aLa8C_GiaD4Li2aqKuv9vc4aT1zcLxttEh_HIGhewgTT9rv8hXbMwerqYF6_PNmvgRKTprRFTlPO4qUiVRFmXL6ZWeUbV27_ImqXLaKJt3TyDrvL9kPmmiogHDZEh_-RY775U7ycVSnIoKU-eJSpYcYlphZZ_ffYoqBhoflv2R7asHbaiq-s4biULbge1e--vXMx3-L2TlL2VsRpQfKTgr9bk3TcIIm8G54CaBsX7H0m50bVRRSEiNUJ6iku8OmbfectLOZ7e6y4IfYHHHgDQvUiWHWqzPXPFSGEf7E5vUZihWoYqcMPSdpowUJ52Q15R-D_tWm6S32eptlujsMdOPc2KGD-n_tnQF84QXlVvc-lhA0AqzwYbFu2Yrd5_sNkC1PQwd_hAFZiYKZzqdkU2YMWnBEdcynC34HNOEUCkZuYK1zSAjCVR-grhtlAx7XKp6FOkdGaHF2mcEbCLp71kdLcsl0rlzV1zor5pIPNbkXXnhQWOLmytM1IpZBP2WA0vgScayQTiNKtBRgtJYOCPa_zw66jTaitah_4y3qXyC3myIeNSa5lXiRegYUv0nC0=\"}";
+		HttpUtils.postWithBodyAsRawRequestAsContent(loginUrl, body);
+
+		System.out.format("Login done");
 	}
 
 	@Override

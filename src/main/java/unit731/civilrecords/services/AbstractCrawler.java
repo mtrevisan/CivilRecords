@@ -52,7 +52,7 @@ public abstract class AbstractCrawler{
 		this.waitTime = waitTime;
 	}
 
-	public void startThread(String archiveURL, String filmNumber, String outputFilePath){
+	public void startThread(String archiveURL, String filmNumber, String username, String password, String outputFilePath){
 		if(thread != null)
 			stopThread();
 
@@ -61,7 +61,7 @@ public abstract class AbstractCrawler{
 		thread = new Thread(){
 			@Override
 			public void run(){
-				readDocument(mainURL + archiveURL, filmNumber, outputFilePath);
+				readDocument(mainURL + archiveURL, filmNumber, username, password, outputFilePath);
 			}
 		};
 
@@ -83,7 +83,7 @@ public abstract class AbstractCrawler{
 			writeNextURLToDownload(null);
 	}
 
-	private void readDocument(String archiveURL, String filmNumber, String outputFilePath){
+	private void readDocument(String archiveURL, String filmNumber, String username, String password, String outputFilePath){
 		DescriptiveStatistics stats = new DescriptiveStatistics(4);
 
 		long start = System.currentTimeMillis();
@@ -96,6 +96,8 @@ public abstract class AbstractCrawler{
 			document.open();
 
 			System.out.format("Created PDF: %s" + LINE_SEPARATOR, outputFilePath);
+
+			login(username, password);
 
 			startingURL = archiveURL;
 			nextURLToDownload = readNextURLToDownload(archiveURL);
@@ -206,6 +208,8 @@ public abstract class AbstractCrawler{
 
 		return path.toString();
 	}
+
+	protected void login(String username, String password) throws IOException{}
 
 	protected abstract String extractPage(String url, String filmNumber, Document document, PdfWriter writer) throws IOException;
 

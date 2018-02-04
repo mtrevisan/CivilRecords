@@ -43,10 +43,15 @@ public class Main{
 			String filmNumber = cmd.getOptionValue("film");
 			if(site == Site.FSFilm && (filmNumber == null || filmNumber.isEmpty()))
 				throw new ParseException("If -site is FSFilm then the film number (option -film) should be provided");
+			String username = cmd.getOptionValue("username");
+			String password = cmd.getOptionValue("password");
+			if((site == Site.FS || site == Site.FSFilm) && (username == null || username.trim().length() == 0 || password == null)
+					|| password.trim().length() == 0)
+				throw new ParseException("If -site is FS or FSFilm then the username (option -username) and password (option -password) should be provided");
 
 			String outputFilePath = cmd.getOptionValue("output");
 			AbstractCrawler crawler = CRAWLERS.get(site);
-			crawler.startThread(archiveURL, filmNumber, outputFilePath);
+			crawler.startThread(archiveURL, filmNumber, username, password, outputFilePath);
 
 			Runtime.getRuntime().addShutdownHook(new Thread(){
 				@Override
@@ -81,6 +86,14 @@ public class Main{
 		Option film = new Option("f", "film", true, "film number (ex. 005330570)");
 		film.setRequired(false);
 		options.addOption(film);
+
+		Option username = new Option("u", "username", true, "username");
+		username.setRequired(false);
+		options.addOption(username);
+
+		Option password = new Option("p", "password", true, "password");
+		password.setRequired(false);
+		options.addOption(password);
 
 		Option output = new Option("o", "output", true, "output file (ex. C:\\Users\\mauro\\Downloads\\archive.pdf)");
 		output.setRequired(true);
