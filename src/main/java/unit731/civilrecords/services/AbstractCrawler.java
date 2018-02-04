@@ -30,7 +30,8 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 public abstract class AbstractCrawler{
 
-	public static final int WAIT_TIME = 10 * 1000;
+	//[ms]
+	public static final int WAIT_TIME = 10_000;
 	public static final int INTERRUPT_WAIT_TIME = 2 * 60 * 1000;
 
 	private static final String CONFIG_FILE = "config.properties";

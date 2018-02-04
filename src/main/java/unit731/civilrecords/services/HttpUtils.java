@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.http.HttpEntity;
@@ -24,6 +25,8 @@ public class HttpUtils{
 	public static final int CONNECT_TIMEOUT = 60 * 1000;
 	public static final int SOCKET_TIMEOUT = 60 * 1000;
 
+	private static Charset CHARSET_DEFAULT = StandardCharsets.UTF_8;
+
 	private static final ObjectMapper OM = new ObjectMapper();
 
 
@@ -36,7 +39,7 @@ public class HttpUtils{
 		if(entity == null)
 			throw new ClientProtocolException("Response contains no content");
 
-		String content = EntityUtils.toString(entity, StandardCharsets.UTF_8.name());
+		String content = EntityUtils.toString(entity, CHARSET_DEFAULT.name());
 		return OM.readTree(content);
 	};
 
@@ -68,7 +71,7 @@ public class HttpUtils{
 			return Request.Post(url)
 				.connectTimeout(CONNECT_TIMEOUT)
 				.socketTimeout(SOCKET_TIMEOUT)
-				.bodyString(body, ContentType.APPLICATION_FORM_URLENCODED)
+				.bodyString(body, ContentType.APPLICATION_FORM_URLENCODED.withCharset(CHARSET_DEFAULT))
 				.execute()
 				.returnContent();
 		}

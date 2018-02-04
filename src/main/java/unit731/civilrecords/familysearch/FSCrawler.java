@@ -8,12 +8,16 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.http.client.fluent.Content;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -27,6 +31,10 @@ public class FSCrawler extends AbstractCrawler{
 	protected static final String URL_FAMILYSEARCH = "https://www.familysearch.org";
 	protected static final String URL_FAMILYSEARCH_PRE_LOGIN = "https://www.familysearch.org/auth/familysearch/login?ldsauth=false";
 	protected static final String URL_FAMILYSEARCH_LOGIN = "https://ident.familysearch.org/cis-web/oauth2/v3/authorization";
+
+//	private static final Object LOCK = new Object();
+//	//[ms]
+//	private static final long LOGIN_WAIT_TIME = 30_000l;
 
 	protected List<String> urls;
 
@@ -45,14 +53,30 @@ public class FSCrawler extends AbstractCrawler{
 		Element doc = Jsoup.parse(preLoginContent);
 		Elements inputParams = doc.select("input[name=params]");
 		String params = (inputParams != null && !inputParams.isEmpty()? inputParams.get(0).attr("value"): null);
+		if(params == null)
+			throw new IOException("Cannot extract authorization key");
 
 		boolean privateComputer = true;
-		String body = "{\"userName\":\"" + username + "\",\"password\":\"" + password + "\","
-			+ (privateComputer? "\"privateComputer\":\"on\",": "")
-			+ "\"params\":\"" + params + "\"}";
-		HttpUtils.postWithBodyAsRawRequestAsContent(URL_FAMILYSEARCH_LOGIN, body);
+		List<BasicNameValuePair> bodyParams = new ArrayList<>();
+		bodyParams.add(new BasicNameValuePair("userName", username));
+		bodyParams.add(new BasicNameValuePair("password", password));
+		bodyParams.add(new BasicNameValuePair("params", params));
+		if(privateComputer)
+			bodyParams.add(new BasicNameValuePair("privateComputer", "on"));
+		String body = URLEncodedUtils.format(bodyParams, StandardCharsets.UTF_8.name());
+		Content response = HttpUtils.postWithBodyAsRawRequestAsContent(URL_FAMILYSEARCH_LOGIN, body);
 
-		System.out.format("Login done" + LINE_SEPARATOR);
+//		synchronized(LOCK){
+//			try{
+//				LOCK.wait(LOGIN_WAIT_TIME);
+//			}
+//			catch(InterruptedException ex){
+//				throw new IOException("Cannot wait for login");
+//			}
+//		}
+
+		System.out.format("Login done: " + params + LINE_SEPARATOR);
+System.out.format(response.asString(StandardCharsets.UTF_8) + LINE_SEPARATOR);
 	}
 
 	@Override
