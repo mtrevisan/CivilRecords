@@ -19,6 +19,7 @@ import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.util.EntityUtils;
 
@@ -71,9 +72,9 @@ public class HttpUtils{
 
 	public static Content postWithBodyAsRawRequestAsContent(String url, String body) throws IOException{
 		try{
-			DefaultHttpClient client = new DefaultHttpClient();
+			HttpClientBuilder client = HttpClientBuilder.create();
 			client.setRedirectStrategy(new LaxRedirectStrategy());
-			Executor exec = Executor.newInstance(client);
+			Executor exec = Executor.newInstance(client.build());
 			return exec.execute(Request.Post(url)
 				.connectTimeout(CONNECT_TIMEOUT)
 				.socketTimeout(SOCKET_TIMEOUT)
