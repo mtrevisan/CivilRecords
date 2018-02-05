@@ -37,7 +37,7 @@ public class FSCrawler extends AbstractCrawler{
 
 	protected List<String> urls;
 
-	protected long currentPageIndex = 0;
+	protected long currentPageIndex;
 	protected long totalPages;
 
 	private boolean loggedIn;
@@ -140,7 +140,7 @@ public class FSCrawler extends AbstractCrawler{
 		//[min]
 		int estimatedTimeToComplete = (int)Math.ceil((totalPages - currentPageIndex) * speed / 60.);
 		System.out.format(Locale.ENGLISH, "Page %s/%s (%2d%%) downloaded and added to PDF (%3.1f s/page, ETA %02d:%02d)      \r",
-			(currentPageIndex > 0? currentPageIndex: "?"), (totalPages > 0? totalPages: "?"), (int)Math.floor((currentPageIndex + 1) * 100. / totalPages),
+			currentPageIndex, (totalPages > 0? totalPages: "?"), (int)Math.floor((currentPageIndex + 1) * 100. / totalPages),
 			speed, estimatedTimeToComplete / 60, estimatedTimeToComplete % 60);
 	}
 
