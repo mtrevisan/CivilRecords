@@ -40,6 +40,8 @@ public class FSCrawler extends AbstractCrawler{
 	protected long currentPageIndex = 0;
 	protected long totalPages;
 
+	private boolean loggedIn;
+
 
 	public FSCrawler(){
 		super(URL_FAMILYSEARCH + "/ark:/", AbstractCrawler.WAIT_TIME);
@@ -47,25 +49,29 @@ public class FSCrawler extends AbstractCrawler{
 
 	@Override
 	protected void login(String username, String password) throws IOException{
-		String preLoginContent = HttpUtils.getRequestAsContent(URL_FAMILYSEARCH_PRE_LOGIN)
-			.asString(StandardCharsets.UTF_8);
-		Element doc = Jsoup.parse(preLoginContent);
-		Elements inputParams = doc.select("input[name=params]");
-		String params = (inputParams != null && !inputParams.isEmpty()? inputParams.get(0).attr("value"): null);
-		if(params == null)
-			throw new IOException("Cannot extract authorization key");
+		if(!loggedIn){
+			String preLoginContent = HttpUtils.getRequestAsContent(URL_FAMILYSEARCH_PRE_LOGIN)
+				.asString(StandardCharsets.UTF_8);
+			Element doc = Jsoup.parse(preLoginContent);
+			Elements inputParams = doc.select("input[name=params]");
+			String params = (inputParams != null && !inputParams.isEmpty()? inputParams.get(0).attr("value"): null);
+			if(params == null)
+				throw new IOException("Cannot extract authorization key");
 
-		boolean privateComputer = true;
-		List<BasicNameValuePair> bodyParams = new ArrayList<>();
-		bodyParams.add(new BasicNameValuePair("userName", username));
-		bodyParams.add(new BasicNameValuePair("password", password));
-		bodyParams.add(new BasicNameValuePair("params", params));
-		if(privateComputer)
-			bodyParams.add(new BasicNameValuePair("privateComputer", "on"));
-		String body = URLEncodedUtils.format(bodyParams, StandardCharsets.UTF_8.name());
-		HttpUtils.postWithBodyAsRawRequestAsContent(URL_FAMILYSEARCH_LOGIN, body);
+			boolean privateComputer = true;
+			List<BasicNameValuePair> bodyParams = new ArrayList<>();
+			bodyParams.add(new BasicNameValuePair("userName", username));
+			bodyParams.add(new BasicNameValuePair("password", password));
+			bodyParams.add(new BasicNameValuePair("params", params));
+			if(privateComputer)
+				bodyParams.add(new BasicNameValuePair("privateComputer", "on"));
+			String body = URLEncodedUtils.format(bodyParams, StandardCharsets.UTF_8.name());
+			HttpUtils.postWithBodyAsRawRequestAsContent(URL_FAMILYSEARCH_LOGIN, body);
 
-		System.out.format("Login done" + LINE_SEPARATOR);
+			System.out.format("Login done" + LINE_SEPARATOR);
+
+			loggedIn = true;
+		}
 	}
 
 	@Override
