@@ -12,6 +12,8 @@ rem birth trevisan giovanni domenico 1930 #44
 rem birth trevisan guido 1936 #586
 rem birth trevisan gelsomino eugenio 1925 #195
 
+rem tv morti 1914 gallinaro michele p. 225
+
 rem Silvestro Antonello, Angela Gonzato
 rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33S7-81WJ-4Q7 -u mauro_trevixan -p nightshadow666 -o "C:\Users\mauro\Downloads\Oderzo Nati 1908.pdf"
 
@@ -51,5 +53,10 @@ rem masutti pro-loco cugino luisa
 rem nato canada emigrato 71 a sarmede
 
 
+rem examples
+rem java -jar dist/CivilRecords.jar -s SAN -a Archivio+di+Stato+di+Treviso/Stato+civile+napoleonico/Mogliano/Nati/1811/null/005009556_00176.jpg.html -o "D:\Mauro\Mogliano Nati 1811.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3QS7-L9ML-LD23 -u mauro_trevixan -p nightshadow666 -o "D:\Mauro\Fregona Nati 1887.pdf"
+rem java -jar dist/CivilRecords.jar -s FSFilm -a 61903/3:1:33SQ-G5ZF-WN3 -f 004869307 -u mauro_trevixan -p nightshadow666 -o "D:\Mauro\Treviso Nati 1913.pdf"
 
-java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSFC-23XZ-6 -u mauro_trevixan -p nightshadow666 -o "C:\Users\mauro\Downloads\Vera Cruz Nati 1936.pdf"
+
+java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSFC-23XZ-6 -u abcdef3 -p fermi123 -o "D:\Mauro\Vera Cruz Nati 1936.pdf"

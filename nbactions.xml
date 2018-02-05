@@ -10,7 +10,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath unit731.civilrecords.Main -s FS -a 61903/3:1:33S7-81WJ-4Q7 -u mauro_trevixan -p nightshadow666 -o "C:\Users\mauro\Downloads\Oderzo Nati 1908.pdf"</exec.args>
+                <exec.args>-classpath %classpath unit731.civilrecords.Main -s FS -a 61903/3:1:3Q9M-CSFC-23XZ-6 -u abcdef3 -p fermi123 -o "D:\Mauro\Vera Cruz Nati 1936.pdf"</exec.args>
                 <exec.executable>java</exec.executable>
             </properties>
         </action>
@@ -24,7 +24,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath unit731.civilrecords.Main -s FS -a 61903/3:1:33S7-81WJ-4Q7 -u mauro_trevixan -p nightshadow666 -o "C:\Users\mauro\Downloads\Oderzo Nati 1908.pdf"</exec.args>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath unit731.civilrecords.Main -s FS -a 61903/3:1:3Q9M-CSFC-23XZ-6 -u abcdef3 -p fermi123 -o "D:\Mauro\Vera Cruz Nati 1936.pdf"</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
             </properties>
@@ -39,7 +39,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath unit731.civilrecords.Main -s FS -a 61903/3:1:33S7-81WJ-4Q7 -u mauro_trevixan -p nightshadow666 -o "C:\Users\mauro\Downloads\Oderzo Nati 1908.pdf"</exec.args>
+                <exec.args>-classpath %classpath unit731.civilrecords.Main -s FS -a 61903/3:1:3Q9M-CSFC-23XZ-6 -u abcdef3 -p fermi123 -o "D:\Mauro\Vera Cruz Nati 1936.pdf"</exec.args>
                 <exec.executable>java</exec.executable>
             </properties>
         </action>

@@ -18,7 +18,7 @@ import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ContentType;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.util.EntityUtils;
@@ -29,7 +29,14 @@ public class HttpUtils{
 	public static final int CONNECT_TIMEOUT = 60 * 1000;
 	public static final int SOCKET_TIMEOUT = 60 * 1000;
 
-	private static Charset CHARSET_DEFAULT = StandardCharsets.UTF_8;
+	private static final Charset CHARSET_DEFAULT = StandardCharsets.UTF_8;
+
+	private static final CloseableHttpClient CLIENT;
+	static{
+		HttpClientBuilder clientBuilder = HttpClientBuilder.create();
+		clientBuilder.setRedirectStrategy(new LaxRedirectStrategy());
+		CLIENT = clientBuilder.build();
+	}
 
 	private static final ObjectMapper OM = new ObjectMapper();
 
@@ -59,10 +66,10 @@ public class HttpUtils{
 
 	public static Content getRequestAsContent(String url) throws IOException{
 		try{
-			return Request.Get(url)
+			Executor exec = Executor.newInstance(CLIENT);
+			return exec.execute(Request.Get(url)
 				.connectTimeout(CONNECT_TIMEOUT)
-				.socketTimeout(SOCKET_TIMEOUT)
-				.execute()
+				.socketTimeout(SOCKET_TIMEOUT))
 				.returnContent();
 		}
 		catch(IOException e){
@@ -72,20 +79,12 @@ public class HttpUtils{
 
 	public static Content postWithBodyAsRawRequestAsContent(String url, String body) throws IOException{
 		try{
-			HttpClientBuilder client = HttpClientBuilder.create();
-			client.setRedirectStrategy(new LaxRedirectStrategy());
-			Executor exec = Executor.newInstance(client.build());
+			Executor exec = Executor.newInstance(CLIENT);
 			return exec.execute(Request.Post(url)
 				.connectTimeout(CONNECT_TIMEOUT)
 				.socketTimeout(SOCKET_TIMEOUT)
 				.bodyString(body, ContentType.APPLICATION_FORM_URLENCODED.withCharset(CHARSET_DEFAULT)))
 				.returnContent();
-//			return Request.Post(url)
-//				.connectTimeout(CONNECT_TIMEOUT)
-//				.socketTimeout(SOCKET_TIMEOUT)
-//				.bodyString(body, ContentType.APPLICATION_FORM_URLENCODED.withCharset(CHARSET_DEFAULT))
-//				.execute()
-//				.returnContent();
 		}
 		catch(IOException e){
 			throw e;
@@ -94,11 +93,11 @@ public class HttpUtils{
 
 	public static JsonNode postWithBodyAsJsonRequestAsJson(String url, String body) throws IOException{
 		try{
-			return Request.Post(url)
+			Executor exec = Executor.newInstance(CLIENT);
+			return exec.execute(Request.Post(url)
 				.connectTimeout(CONNECT_TIMEOUT)
 				.socketTimeout(SOCKET_TIMEOUT)
-				.bodyString(body, ContentType.APPLICATION_JSON)
-				.execute()
+				.bodyString(body, ContentType.APPLICATION_JSON))
 				.handleResponse(JSONNODE_CONTENT_HANDLER);
 		}
 		catch(IOException e){

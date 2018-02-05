@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.apache.http.client.fluent.Content;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.jsoup.Jsoup;
@@ -32,9 +31,9 @@ public class FSCrawler extends AbstractCrawler{
 	protected static final String URL_FAMILYSEARCH_PRE_LOGIN = "https://www.familysearch.org/auth/familysearch/login?ldsauth=false";
 	protected static final String URL_FAMILYSEARCH_LOGIN = "https://ident.familysearch.org/cis-web/oauth2/v3/authorization";
 
-//	private static final Object LOCK = new Object();
-//	//[ms]
-//	private static final long LOGIN_WAIT_TIME = 30_000l;
+	private static final String RESOURCE_TYPE_COLLECTION = "http://gedcomx.org/Collection";
+	private static final String RESOURCE_TYPE_DIGITAL_ARTIFACT = "http://gedcomx.org/DigitalArtifact";
+
 
 	protected List<String> urls;
 
@@ -64,19 +63,9 @@ public class FSCrawler extends AbstractCrawler{
 		if(privateComputer)
 			bodyParams.add(new BasicNameValuePair("privateComputer", "on"));
 		String body = URLEncodedUtils.format(bodyParams, StandardCharsets.UTF_8.name());
-		Content response = HttpUtils.postWithBodyAsRawRequestAsContent(URL_FAMILYSEARCH_LOGIN, body);
+		HttpUtils.postWithBodyAsRawRequestAsContent(URL_FAMILYSEARCH_LOGIN, body);
 
-//		synchronized(LOCK){
-//			try{
-//				LOCK.wait(LOGIN_WAIT_TIME);
-//			}
-//			catch(InterruptedException ex){
-//				throw new IOException("Cannot wait for login");
-//			}
-//		}
-
-		System.out.format("Login done: " + params + LINE_SEPARATOR);
-System.out.format(response.asString(StandardCharsets.UTF_8) + LINE_SEPARATOR);
+		System.out.format("Login done" + LINE_SEPARATOR);
 	}
 
 	@Override
@@ -94,11 +83,15 @@ System.out.format(response.asString(StandardCharsets.UTF_8) + LINE_SEPARATOR);
 
 			String self = null;
 			ArrayNode sourceDescriptions = (ArrayNode)response.path("meta").path("sourceDescriptions");
-			for(JsonNode sourceDescription : sourceDescriptions)
-				if("http://gedcomx.org/Collection".equals(sourceDescription.path("resourceType").asText(null))){
+			for(JsonNode sourceDescription : sourceDescriptions){
+				String resourceType = sourceDescription.path("resourceType").asText(null);
+				if(RESOURCE_TYPE_COLLECTION.equals(resourceType)){
 					self = sourceDescription.path("identifiers").path("http://gedcomx.org/Primary").get(0).asText(null);
 					break;
 				}
+			}
+			if(self == null)
+				throw new IOException("Cannot find next URL from '" + sourceDescriptions.toString() + "'");
 
 			data = "{\"type\":\"waypoint-data\",\"args\":{\"waypointURL\":\"" + self + "\",\"state\":{},\"locale\":\"en\"}}";
 			response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH + "/search/filmdatainfo", data);
