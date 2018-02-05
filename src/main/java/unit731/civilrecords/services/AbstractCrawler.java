@@ -53,7 +53,7 @@ public abstract class AbstractCrawler{
 		this.waitTime = waitTime;
 	}
 
-	public void startThread(String archiveURL, String filmNumber, String username, String password, String outputFilePath){
+	public void startThread(String archiveURL, String username, String password, String outputFilePath){
 		if(thread != null)
 			stopThread();
 
@@ -62,7 +62,7 @@ public abstract class AbstractCrawler{
 		thread = new Thread(){
 			@Override
 			public void run(){
-				readDocument(mainURL + archiveURL, filmNumber, username, password, outputFilePath);
+				readDocument(mainURL + archiveURL, username, password, outputFilePath);
 			}
 		};
 
@@ -84,7 +84,7 @@ public abstract class AbstractCrawler{
 			writeNextURLToDownload(null);
 	}
 
-	private void readDocument(String archiveURL, String filmNumber, String username, String password, String outputFilePath){
+	private void readDocument(String archiveURL, String username, String password, String outputFilePath){
 		DescriptiveStatistics stats = new DescriptiveStatistics(4);
 
 		long start = System.currentTimeMillis();
@@ -105,7 +105,7 @@ public abstract class AbstractCrawler{
 			while(nextURLToDownload != null && !shutdown){
 				long cycleStart = System.currentTimeMillis();
 
-				nextURLToDownload = extractPage(nextURLToDownload, filmNumber, document, writer);
+				nextURLToDownload = extractPage(nextURLToDownload, document, writer);
 
 				//[s]
 				double cycleDuration = (System.currentTimeMillis() - cycleStart) / 1000.;
@@ -212,7 +212,7 @@ public abstract class AbstractCrawler{
 
 	protected void login(String username, String password) throws IOException{}
 
-	protected abstract String extractPage(String url, String filmNumber, Document document, PdfWriter writer) throws IOException;
+	protected abstract String extractPage(String url, Document document, PdfWriter writer) throws IOException;
 
 	protected void extractImage(String url, Document document, PdfWriter writer){
 		while(!shutdown){
@@ -238,10 +238,10 @@ public abstract class AbstractCrawler{
 		}
 	}
 
-	protected String extractNextURL(String url, String filmNumber){
+	protected String extractNextURL(String url){
 		while(!shutdown || !shutdownBeforeCurrentPage){
 			try{
-				url = getNextURL(url, filmNumber);
+				url = getNextURL(url);
 
 				break;
 			}
@@ -271,7 +271,7 @@ public abstract class AbstractCrawler{
 		canvas.addImage(img);
 	}
 
-	protected String getNextURL(String url, String filmNumber) throws URISyntaxException, IOException{
+	protected String getNextURL(String url) throws URISyntaxException, IOException{
 		return null;
 	}
 

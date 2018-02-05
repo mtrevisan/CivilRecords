@@ -9,14 +9,13 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import unit731.civilrecords.familysearch.FSCrawler;
-import unit731.civilrecords.familysearch.FSFilmCrawler;
 import unit731.civilrecords.san.SANCrawler;
 import unit731.civilrecords.services.AbstractCrawler;
 
 
 public class Main{
 
-	private static enum Site{FS, FSFilm, SAN};
+	private static enum Site{FS, SAN};
 
 	static{
 		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
@@ -25,7 +24,6 @@ public class Main{
 	private static final EnumMap<Site, AbstractCrawler> CRAWLERS = new EnumMap<>(Site.class);
 	static{
 		CRAWLERS.put(Site.FS, new FSCrawler());
-		CRAWLERS.put(Site.FSFilm, new FSFilmCrawler());
 		CRAWLERS.put(Site.SAN, new SANCrawler());
 	}
 
@@ -40,18 +38,14 @@ public class Main{
 
 			Site site = Site.valueOf(cmd.getOptionValue("site"));
 			String archiveURL = cmd.getOptionValue("archive");
-			String filmNumber = cmd.getOptionValue("film");
-			if(site == Site.FSFilm && (filmNumber == null || filmNumber.isEmpty()))
-				throw new ParseException("If -site is FSFilm then the film number (option -film) should be provided");
 			String username = cmd.getOptionValue("username");
 			String password = cmd.getOptionValue("password");
-			if((site == Site.FS || site == Site.FSFilm) && (username == null || username.trim().length() == 0 || password == null)
-					|| password.trim().length() == 0)
+			if(site == Site.FS && (username == null || username.trim().length() == 0 || password == null) || password.trim().length() == 0)
 				throw new ParseException("If -site is FS or FSFilm then the username (option -username) and password (option -password) should be provided");
 
 			String outputFilePath = cmd.getOptionValue("output");
 			AbstractCrawler crawler = CRAWLERS.get(site);
-			crawler.startThread(archiveURL, filmNumber, username, password, outputFilePath);
+			crawler.startThread(archiveURL, username, password, outputFilePath);
 
 			Runtime.getRuntime().addShutdownHook(new Thread(){
 				@Override
@@ -82,10 +76,6 @@ public class Main{
 		Option archive = new Option("a", "archive", true, "archive URL (ex. 61903/3:1:3QSQ-G9WY-C7JD or Archivio+di+Stato+di+Treviso/Stato+civile+napoleonico/Sarmede/Matrimoni/1806/317/005058208_00001.jpg)");
 		archive.setRequired(true);
 		options.addOption(archive);
-
-		Option film = new Option("f", "film", true, "film number (ex. 005330570)");
-		film.setRequired(false);
-		options.addOption(film);
 
 		Option username = new Option("u", "username", true, "username");
 		username.setRequired(false);

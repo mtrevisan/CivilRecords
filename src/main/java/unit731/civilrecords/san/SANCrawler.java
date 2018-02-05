@@ -29,7 +29,7 @@ public class SANCrawler extends AbstractCrawler{
 	}
 
 	@Override
-	protected String extractPage(String url, String filmNumber, Document document, PdfWriter writer) throws IOException{
+	protected String extractPage(String url, Document document, PdfWriter writer) throws IOException{
 		String nextURL = null;
 		while(!shutdown){
 			try{

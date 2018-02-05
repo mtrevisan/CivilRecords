@@ -69,39 +69,58 @@ public class FSCrawler extends AbstractCrawler{
 	}
 
 	@Override
-	protected String extractPage(String url, String filmNumber, Document document, PdfWriter writer) throws IOException{
+	protected String extractPage(String url, Document document, PdfWriter writer) throws IOException{
 		extractImage(url + "/dist.jpg", document, writer);
 
-		return extractNextURL(url, filmNumber);
+		return extractNextURL(url);
 	}
 
 	@Override
-	protected String getNextURL(String url, String filmNumber) throws URISyntaxException, IOException{
+	protected String getNextURL(String url) throws URISyntaxException, IOException{
 		if(urls == null){
 			String data = "{\"type\":\"image-data\",\"args\":{\"imageURL\":\"" + url + "\",\"state\":{}}}";
 			JsonNode response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH + "/search/filmdatainfo", data);
 
 			String self = null;
+			String filmNumber = null;
 			ArrayNode sourceDescriptions = (ArrayNode)response.path("meta").path("sourceDescriptions");
-			for(JsonNode sourceDescription : sourceDescriptions){
-				String resourceType = sourceDescription.path("resourceType").asText(null);
-				if(RESOURCE_TYPE_COLLECTION.equals(resourceType)){
-					self = sourceDescription.path("identifiers").path("http://gedcomx.org/Primary").get(0).asText(null);
-					break;
+			for(JsonNode sourceDescription : sourceDescriptions)
+				if(sourceDescription.has("rights")){
+					String resourceType = sourceDescription.path("resourceType").asText(null);
+					if(RESOURCE_TYPE_COLLECTION.equals(resourceType)){
+						self = sourceDescription.path("identifiers").path("http://gedcomx.org/Primary").get(0).asText(null);
+						break;
+					}
+					else if(RESOURCE_TYPE_DIGITAL_ARTIFACT.equals(resourceType)){
+						filmNumber = response.path("dgsNum").asText(null);
+						break;
+					}
 				}
+			if(filmNumber != null){
+				data = "{\"type\":\"film-data\",\"args\":{\"dgsNum\":\"" + filmNumber + "\",\"state\":{},\"locale\":\"en\"}}";
+				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH + "/search/filmdatainfo", data);
+
+				ArrayNode images = (ArrayNode)response.path("images");
+				urls = StreamSupport.stream(images.spliterator(), false)
+					.map(JsonNode::asText)
+					.map(str -> str.substring(0, str.length() - "/image.xml".length()))
+					.collect(Collectors.toList());
+				totalPages = urls.size();
 			}
+			else{
+				data = "{\"type\":\"waypoint-data\",\"args\":{\"waypointURL\":\"" + self + "\",\"state\":{},\"locale\":\"en\"}}";
+				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH + "/search/filmdatainfo", data);
+
+				ArrayNode images = (ArrayNode)response.path("images");
+				urls = StreamSupport.stream(images.spliterator(), false)
+					.map(JsonNode::asText)
+					.map(str -> str.substring(0, str.indexOf('?')))
+					.collect(Collectors.toList());
+				totalPages = urls.size();
+			}
+
 			if(self == null)
 				throw new IOException("Cannot find next URL from '" + sourceDescriptions.toString() + "'");
-
-			data = "{\"type\":\"waypoint-data\",\"args\":{\"waypointURL\":\"" + self + "\",\"state\":{},\"locale\":\"en\"}}";
-			response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH + "/search/filmdatainfo", data);
-
-			ArrayNode images = (ArrayNode)response.path("images");
-			urls = StreamSupport.stream(images.spliterator(), false)
-				.map(JsonNode::asText)
-				.map(str -> str.substring(0, str.indexOf('?')))
-				.collect(Collectors.toList());
-			totalPages = urls.size();
 		}
 		currentPageIndex = urls.indexOf(url);
 

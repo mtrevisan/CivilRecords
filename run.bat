@@ -15,17 +15,17 @@ rem birth trevisan gelsomino eugenio 1925 #195
 rem tv morti 1914 gallinaro michele p. 225
 
 rem Silvestro Antonello, Angela Gonzato
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33S7-81WJ-4Q7 -u mauro_trevixan -p nightshadow666 -o "C:\Users\mauro\Downloads\Oderzo Nati 1908.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33S7-81WJ-4Q7 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Oderzo Nati 1908.pdf"
 
 rem Luigi Trevisan + Maria di Dio (Breda? Santa Maria del rovere? after 14 jul 1900)
 
 rem Rodolfo Giacomini
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33SQ-G1GP-9QPB -u mauro_trevixan -p nightshadow666 -o "C:\Users\mauro\Downloads\Roncade Nati 1879.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33SQ-G1GP-9QPB -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Roncade Nati 1879.pdf"
 
 
 rem examples
 rem java -jar dist/CivilRecords.jar -s SAN -a Archivio+di+Stato+di+Treviso/Stato+civile+napoleonico/Mogliano/Nati/1811/null/005009556_00176.jpg.html -o "C:\Users\mauro\Downloads\Mogliano Nati 1811.pdf"
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3QS7-L9ML-LD23 -u mauro_trevixan -p nightshadow666 -o "C:\Users\mauro\Downloads\Fregona Nati 1887.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3QS7-L9ML-LD23 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Fregona Nati 1887.pdf"
 rem java -jar dist/CivilRecords.jar -s FSFilm -a 61903/3:1:33SQ-G5ZF-WN3 -f 004869307 -o "C:\Users\mauro\Downloads\Treviso Nati 1913.pdf"
 
 rem java -jar dist/CivilRecords.jar -s SAN -a Archivio+di+Stato+di+Treviso/Stato+civile+napoleonico/San+Cassiano+di+Mesco/Nati/1808/338/005058553_00063.jpg.html -o "C:\Users\mauro\Downloads\San Cassiano del Meschio Nati 1808.pdf"
@@ -34,17 +34,17 @@ rem java -jar dist/CivilRecords.jar -s SAN -a Archivio+di+Stato+di+Udine/Stato+c
 
 
 rem Giuseppa Vittoria Trevisan
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33SQ-G5K7-FFC -u mauro_trevixan -p nightshadow666 -o "C:\Users\mauro\Downloads\Treviso Nati 1887.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33SQ-G5K7-FFC -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Treviso Nati 1887.pdf"
 rem Antonia Trevisan 20 jun
-rem java -jar dist/CivilRecords.jar -s FSFilm -a 61903/3:1:33SQ-G55Z-CGN -f 004872829 -u mauro_trevixan -p nightshadow666 -o "C:\Users\mauro\Downloads\Treviso Nati 1920.pdf"
+rem java -jar dist/CivilRecords.jar -s FSFilm -a 61903/3:1:33SQ-G55Z-CGN -f 004872829 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Treviso Nati 1920.pdf"
 
 rem Domenica Sonego
 rem java -jar dist/CivilRecords.jar -s SAN -a Archivio+di+Stato+di+Treviso/Stato+civile+napoleonico/Giavera/Nati/1810/402/005073374_00117.jpg.html -o "C:\Users\mauro\Downloads\Giavera Nati 1810.pdf"
 
-rem java -jar dist/CivilRecords.jar -s FSFilm -a 61903/3:1:3QS7-99W2-WSN8 -f 007172224 -u mauro_trevixan -p nightshadow666 -o "C:\Users\mauro\Downloads\San Stino di Livenza Matrimoni 1883-1916, 1919-1929 Morti 1871-1875.pdf"
-rem java -jar dist/CivilRecords.jar -s FSFilm -a 61903/3:1:3QS7-89W2-W9FT -f 007172226 -u mauro_trevixan -p nightshadow666 -o "C:\Users\mauro\Downloads\San Stino di Livenza Cittadinanze 1871-1929.pdf"
-rem java -jar dist/CivilRecords.jar -s FSFilm -a 61903/3:1:3QS7-99W2-HKSH -f 007172225 -u mauro_trevixan -p nightshadow666 -o "C:\Users\mauro\Downloads\San Stino di Livenza Morti 1876-1916, 1925, 1919-1929.pdf"
-rem java -jar dist/CivilRecords.jar -s FSFilm -a 61903/3:1:3QSQ-G9W2-X33Z -f 007172223 -u mauro_trevixan -p nightshadow666 -o "C:\Users\mauro\Downloads\San Stino di Livenza Matrimoni 1871-1882.pdf"
+rem java -jar dist/CivilRecords.jar -s FSFilm -a 61903/3:1:3QS7-99W2-WSN8 -f 007172224 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\San Stino di Livenza Matrimoni 1883-1916, 1919-1929 Morti 1871-1875.pdf"
+rem java -jar dist/CivilRecords.jar -s FSFilm -a 61903/3:1:3QS7-89W2-W9FT -f 007172226 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\San Stino di Livenza Cittadinanze 1871-1929.pdf"
+rem java -jar dist/CivilRecords.jar -s FSFilm -a 61903/3:1:3QS7-99W2-HKSH -f 007172225 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\San Stino di Livenza Morti 1876-1916, 1925, 1919-1929.pdf"
+rem java -jar dist/CivilRecords.jar -s FSFilm -a 61903/3:1:3QSQ-G9W2-X33Z -f 007172223 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\San Stino di Livenza Matrimoni 1871-1882.pdf"
 
 
 rem masutti vanda fb
@@ -55,8 +55,8 @@ rem nato canada emigrato 71 a sarmede
 
 rem examples
 rem java -jar dist/CivilRecords.jar -s SAN -a Archivio+di+Stato+di+Treviso/Stato+civile+napoleonico/Mogliano/Nati/1811/null/005009556_00176.jpg.html -o "D:\Mauro\Mogliano Nati 1811.pdf"
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3QS7-L9ML-LD23 -u mauro_trevixan -p nightshadow666 -o "D:\Mauro\Fregona Nati 1887.pdf"
-rem java -jar dist/CivilRecords.jar -s FSFilm -a 61903/3:1:33SQ-G5ZF-WN3 -f 004869307 -u mauro_trevixan -p nightshadow666 -o "D:\Mauro\Treviso Nati 1913.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3QS7-L9ML-LD23 -u abcdef3 -p fermi123 -o "D:\Mauro\Fregona Nati 1887.pdf"
+rem java -jar dist/CivilRecords.jar -s FSFilm -a 61903/3:1:33SQ-G5ZF-WN3 -f 004869307 -u abcdef3 -p fermi123 -o "D:\Mauro\Treviso Nati 1913.pdf"
 
 
-java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSFC-23XZ-6 -u abcdef3 -p fermi123 -o "D:\Mauro\Vera Cruz Nati 1936.pdf"
+java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSFC-23XZ-6 -f 103107851 -u abcdef3 -p fermi123 -o "D:\Mauro\Vera Cruz Nati 1936.pdf"
