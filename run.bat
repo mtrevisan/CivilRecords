@@ -59,5 +59,8 @@ rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3QS7-L9ML-LD23 -u abcdef3
 rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33SQ-G5ZF-WN3 -u abcdef3 -p fermi123 -o "D:\Mauro\Treviso Nati 1913.pdf"
 
 
-java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSFT-4S95-2 -u abcdef3 -p fermi123 -o "D:\Mauro\_Vera Cruz death 193611-193704.pdf"
-java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSH2-43XC -u abcdef3 -p fermi123 -o "D:\Mauro\_Vera Cruz birth 193010-193104.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSFT-4S95-2 -u abcdef3 -p fermi123 -o "D:\Mauro\_Vera Cruz death 193611-193704.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSH2-43XC -u abcdef3 -p fermi123 -o "D:\Mauro\_Vera Cruz birth 193010-193104.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSL5-Y369-D -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\_Vera Cruz death 193502-193507.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSNF-LQHL-4 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\_Vera Cruz birth 194408-194410.pdf"
+java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSLX-FS94-3 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\_Vera Cruz birth 194312-194501.pdf"
