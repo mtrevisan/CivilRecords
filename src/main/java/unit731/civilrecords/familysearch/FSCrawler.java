@@ -37,7 +37,7 @@ public class FSCrawler extends AbstractCrawler{
 
 	protected List<String> urls;
 
-	protected long currentPageIndex;
+	protected long currentPageIndex = 0;
 	protected long totalPages;
 
 
