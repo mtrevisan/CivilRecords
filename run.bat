@@ -59,4 +59,4 @@ rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3QS7-L9ML-LD23 -u abcdef3
 rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33SQ-G5ZF-WN3 -u abcdef3 -p fermi123 -o "D:\Mauro\Treviso Nati 1913.pdf"
 
 
-java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CS6C-DYLB -u abcdef3 -p fermi123 -o "D:\Mauro\_Vera Cruz marriage 193507-193610.pdf"
+java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSCQ-RSQQ-N -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\_Vera Cruz death 197311-197509.pdf"
