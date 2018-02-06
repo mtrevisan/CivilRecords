@@ -129,6 +129,8 @@ public class FSCrawler extends AbstractCrawler{
 			}
 		}
 		currentPageIndex = urls.indexOf(url);
+		if(currentPageIndex < 0)
+			currentPageIndex = 0;
 
 		return (currentPageIndex < totalPages - 1? urls.get((int)(currentPageIndex + 1)): null);
 	}
