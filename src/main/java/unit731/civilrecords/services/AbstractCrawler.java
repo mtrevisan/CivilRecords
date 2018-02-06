@@ -193,7 +193,7 @@ public abstract class AbstractCrawler{
 		while(Files.exists(path)){
 			//find and extract the number currently used
 			String newFilename = path.getFileName().toString();
-			String matcher = "(.+\\-)(\\d+)" + Pattern.quote(extension);
+			String matcher = "(.+\\-)(\\d{2})" + Pattern.quote(extension);
 			if(newFilename.matches(matcher)){
 				int number = Integer.valueOf(newFilename.replaceFirst(matcher, "$2"));
 				newFilename = newFilename.replaceFirst(matcher, "$1" + String.format("%02d", number + 1) + extension);

@@ -114,6 +114,9 @@ public class FSCrawler extends AbstractCrawler{
 				totalPages = urls.size();
 			}
 			else{
+				if(self == null)
+					throw new IOException("Cannot find next URL from '" + sourceDescriptions.toString() + "'");
+
 				data = "{\"type\":\"waypoint-data\",\"args\":{\"waypointURL\":\"" + self + "\",\"state\":{},\"locale\":\"en\"}}";
 				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH + "/search/filmdatainfo", data);
 
@@ -124,9 +127,6 @@ public class FSCrawler extends AbstractCrawler{
 					.collect(Collectors.toList());
 				totalPages = urls.size();
 			}
-
-			if(self == null)
-				throw new IOException("Cannot find next URL from '" + sourceDescriptions.toString() + "'");
 		}
 		currentPageIndex = urls.indexOf(url);
 
