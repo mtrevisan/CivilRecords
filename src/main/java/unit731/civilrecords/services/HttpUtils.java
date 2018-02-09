@@ -38,7 +38,7 @@ public class HttpUtils{
 		CLIENT = clientBuilder.build();
 	}
 
-	private static final ObjectMapper OM = new ObjectMapper();
+	private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
 
 	private static final ResponseHandler<JsonNode> JSONNODE_CONTENT_HANDLER = (HttpResponse response) -> {
@@ -51,7 +51,7 @@ public class HttpUtils{
 			throw new ClientProtocolException("Response contains no content");
 
 		String content = EntityUtils.toString(entity, CHARSET_DEFAULT.name());
-		return OM.readTree(content);
+		return JSON_MAPPER.readTree(content);
 	};
 
 

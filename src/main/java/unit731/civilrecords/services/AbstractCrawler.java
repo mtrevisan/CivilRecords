@@ -76,10 +76,7 @@ public abstract class AbstractCrawler{
 		}
 		catch(InterruptedException e){}
 
-		if(nextURLToDownload != null)
-			writeNextURLToDownload(nextURLToDownload);
-		else
-			writeNextURLToDownload(null);
+		writeNextURLToDownload(nextURLToDownload);
 	}
 
 	private void readDocument(String archiveURL, String username, String password, String outputFilePath){
