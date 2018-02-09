@@ -11,6 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -27,24 +29,28 @@ import unit731.civilrecords.services.HttpUtils;
 
 public class FSCrawler extends AbstractCrawler{
 
-	protected static final String URL_FAMILYSEARCH = "https://www.familysearch.org";
-	protected static final String URL_FAMILYSEARCH_PRE_LOGIN = "https://www.familysearch.org/auth/familysearch/login?ldsauth=false";
-	protected static final String URL_FAMILYSEARCH_LOGIN = "https://ident.familysearch.org/cis-web/oauth2/v3/authorization";
+	private static final String URL_FAMILYSEARCH = "https://www.familysearch.org";
+	private static final String URL_FAMILYSEARCH_ARCHIVE = URL_FAMILYSEARCH + "/ark:/";
+	private static final String URL_FAMILYSEARCH_CATALOG = URL_FAMILYSEARCH + "/search/catalog/";
+	private static final String URL_FAMILYSEARCH_DATA = URL_FAMILYSEARCH + "/search/filmdatainfo";
+	private static final String URL_FAMILYSEARCH_PRE_LOGIN = "https://www.familysearch.org/auth/familysearch/login?ldsauth=false";
+	private static final String URL_FAMILYSEARCH_LOGIN = "https://ident.familysearch.org/cis-web/oauth2/v3/authorization";
+	private static final Matcher FAMILYSEARCH_URL_CLEANER = Pattern.compile("https?://(?:www.)?familysearch.org/ark:/([^/]+/[^/]+)(?:/image.xml)?").matcher("");
 
 	private static final String RESOURCE_TYPE_COLLECTION = "http://gedcomx.org/Collection";
 	private static final String RESOURCE_TYPE_DIGITAL_ARTIFACT = "http://gedcomx.org/DigitalArtifact";
 
 
-	protected List<String> urls;
+	private List<String> urls;
 
-	protected long currentPageIndex;
-	protected long totalPages;
+	private long currentPageIndex;
+	private long totalPages;
 
 	private boolean loggedIn;
 
 
 	public FSCrawler(){
-		super(URL_FAMILYSEARCH + "/ark:/", AbstractCrawler.WAIT_TIME);
+		super(AbstractCrawler.WAIT_TIME);
 	}
 
 	@Override
@@ -76,6 +82,9 @@ public class FSCrawler extends AbstractCrawler{
 
 	@Override
 	protected String extractPage(String url, Document document, PdfWriter writer) throws IOException{
+		//URL_FAMILYSEARCH_CATALOG
+		url = URL_FAMILYSEARCH_ARCHIVE + url;
+
 		extractImage(url + "/dist.jpg", document, writer);
 
 		return extractNextURL(url);
@@ -85,7 +94,7 @@ public class FSCrawler extends AbstractCrawler{
 	protected String getNextURL(String url) throws URISyntaxException, IOException{
 		if(urls == null){
 			String data = "{\"type\":\"image-data\",\"args\":{\"imageURL\":\"" + url + "\",\"state\":{}}}";
-			JsonNode response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH + "/search/filmdatainfo", data);
+			JsonNode response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
 			String self = null;
 			String filmNumber = null;
@@ -104,12 +113,12 @@ public class FSCrawler extends AbstractCrawler{
 				}
 			if(filmNumber != null){
 				data = "{\"type\":\"film-data\",\"args\":{\"dgsNum\":\"" + filmNumber + "\",\"state\":{},\"locale\":\"en\"}}";
-				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH + "/search/filmdatainfo", data);
+				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
 				ArrayNode images = (ArrayNode)response.path("images");
 				urls = StreamSupport.stream(images.spliterator(), false)
 					.map(JsonNode::asText)
-					.map(str -> str.substring(0, str.length() - "/image.xml".length()))
+					.map(str -> FAMILYSEARCH_URL_CLEANER.reset(str).replaceFirst("$1"))
 					.collect(Collectors.toList());
 				totalPages = urls.size();
 			}
@@ -118,7 +127,7 @@ public class FSCrawler extends AbstractCrawler{
 					throw new IOException("Cannot find next URL from '" + sourceDescriptions.toString() + "'");
 
 				data = "{\"type\":\"waypoint-data\",\"args\":{\"waypointURL\":\"" + self + "\",\"state\":{},\"locale\":\"en\"}}";
-				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH + "/search/filmdatainfo", data);
+				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
 				ArrayNode images = (ArrayNode)response.path("images");
 				urls = StreamSupport.stream(images.spliterator(), false)
@@ -128,7 +137,7 @@ public class FSCrawler extends AbstractCrawler{
 				totalPages = urls.size();
 			}
 		}
-		currentPageIndex = urls.indexOf(url);
+		currentPageIndex = urls.indexOf(FAMILYSEARCH_URL_CLEANER.reset(url).replaceFirst("$1"));
 		if(currentPageIndex < 0)
 			currentPageIndex = 0;
 

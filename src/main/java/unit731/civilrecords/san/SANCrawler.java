@@ -22,10 +22,11 @@ import unit731.civilrecords.services.HttpUtils;
 public class SANCrawler extends AbstractCrawler{
 
 	private static final String URL_SAN = "http://www.antenati.san.beniculturali.it";
+	private static final String URL_SAN_ARCHIVE = URL_SAN + "/v/";
 
 
 	public SANCrawler(){
-		super(URL_SAN + "/v/", AbstractCrawler.WAIT_TIME);
+		super(AbstractCrawler.WAIT_TIME);
 	}
 
 	@Override
@@ -33,7 +34,7 @@ public class SANCrawler extends AbstractCrawler{
 		String nextURL = null;
 		while(!shutdown){
 			try{
-				String content = HttpUtils.getRequestAsContent(url)
+				String content = HttpUtils.getRequestAsContent(URL_SAN_ARCHIVE + url)
 					.asString(StandardCharsets.UTF_8);
 				Element doc = Jsoup.parse(content);
 

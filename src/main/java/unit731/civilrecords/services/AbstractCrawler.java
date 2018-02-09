@@ -37,7 +37,6 @@ public abstract class AbstractCrawler{
 	private static final String CONFIG_FILE = "config.properties";
 	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
-	private final String mainURL;
 	private final int waitTime;
 
 	private Thread thread;
@@ -48,12 +47,11 @@ public abstract class AbstractCrawler{
 	private String nextURLToDownload;
 
 
-	protected AbstractCrawler(String url, int waitTime){
-		mainURL = url;
+	protected AbstractCrawler(int waitTime){
 		this.waitTime = waitTime;
 	}
 
-	public void startThread(String archiveURL, String username, String password, String outputFilePath){
+	public void startThread(String archiveURL, Long catalogNumber, String username, String password, String outputFilePath){
 		if(thread != null)
 			stopThread();
 
@@ -62,7 +60,7 @@ public abstract class AbstractCrawler{
 		thread = new Thread(){
 			@Override
 			public void run(){
-				readDocument(mainURL + archiveURL, username, password, outputFilePath);
+				readDocument(archiveURL, username, password, outputFilePath);
 			}
 		};
 
