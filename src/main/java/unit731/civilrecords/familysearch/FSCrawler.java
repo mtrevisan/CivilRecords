@@ -36,6 +36,7 @@ public class FSCrawler extends AbstractCrawler{
 	private static final String URL_FAMILYSEARCH_PRE_LOGIN = "https://www.familysearch.org/auth/familysearch/login?ldsauth=false";
 	private static final String URL_FAMILYSEARCH_LOGIN = "https://ident.familysearch.org/cis-web/oauth2/v3/authorization";
 	private static final Matcher FAMILYSEARCH_URL_CLEANER = Pattern.compile("https?://(?:www.)?familysearch.org/ark:/([^/]+/[^/]+)(?:/image.xml)?").matcher("");
+	private static final Matcher FAMILYSEARCH_CATALOG_SCRIPT_CLEANER = Pattern.compile("var data ?= ?\\{((?!\\};).+?)\\};").matcher("");
 
 	private static final String RESOURCE_TYPE_COLLECTION = "http://gedcomx.org/Collection";
 	private static final String RESOURCE_TYPE_DIGITAL_ARTIFACT = "http://gedcomx.org/DigitalArtifact";

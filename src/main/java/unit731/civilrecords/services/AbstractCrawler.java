@@ -1,5 +1,8 @@
 package unit731.civilrecords.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -15,17 +18,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FilenameUtils;
-
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.http.client.fluent.Content;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 
 public abstract class AbstractCrawler{
@@ -50,6 +60,8 @@ public abstract class AbstractCrawler{
 	protected AbstractCrawler(int waitTime){
 		this.waitTime = waitTime;
 	}
+	private static final Matcher FAMILYSEARCH_CATALOG_SCRIPT_CLEANER = Pattern.compile("var\\s+data\\s*=\\s*([^;]+?);").matcher("");
+	private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
 	public void startThread(String archiveURL, Long catalogNumber, String username, String password, String outputFilePath){
 		if(thread != null)
@@ -60,7 +72,51 @@ public abstract class AbstractCrawler{
 		thread = new Thread(){
 			@Override
 			public void run(){
-				readDocument(archiveURL, username, password, outputFilePath);
+				List<String> archiveURLs = new ArrayList<>();
+				if(catalogNumber != null){
+					try{
+						//extract list of archiveURLs
+						String bla = "https://www.familysearch.org/search/catalog/" + catalogNumber;
+						String catalogContent = HttpUtils.getRequestAsContent(bla)
+							.asString(StandardCharsets.UTF_8);
+						Element doc = Jsoup.parse(catalogContent);
+						Elements elems = doc.getElementsByTag("script");
+						if(elems == null || elems.isEmpty())
+							throw new IOException("Invalid catalog number in URL " + bla);
+
+						JsonNode tree = null;
+						for(Element elem : elems){
+							String scriptContent = elem.html();
+							if(scriptContent.contains("\"" + catalogNumber + "\"")){
+								FAMILYSEARCH_CATALOG_SCRIPT_CLEANER.reset(scriptContent);
+								if(FAMILYSEARCH_CATALOG_SCRIPT_CLEANER.find()){
+									String dataContent = FAMILYSEARCH_CATALOG_SCRIPT_CLEANER.group(1);
+									tree = JSON_MAPPER.readTree(dataContent);
+
+									break;
+								}
+							}
+						}
+						String filenamePrefix = tree.path("title").get(0).asText("place");
+						ArrayNode list = (ArrayNode)tree.get("film_note");
+						for(JsonNode node : list){
+							String filenameSuffix = node.path("text").get(0).asText("");
+							String filmNumber = node.path("filmno").get(0).asText(null);
+							//TODO
+							System.out.println(node);
+						}
+						//TODO
+					}
+					catch(IOException ex){
+						Logger.getLogger(AbstractCrawler.class.getName()).log(Level.SEVERE, null, ex);
+					}
+
+				}
+				else
+					archiveURLs.add(archiveURL);
+
+				for(String url : archiveURLs)
+					readDocument(url, username, password, outputFilePath);
 			}
 		};
 
