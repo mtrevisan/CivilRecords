@@ -1,6 +1,7 @@
 package unit731.civilrecords.familysearch;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -17,7 +18,6 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.apache.http.client.fluent.Content;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.jsoup.Jsoup;
@@ -41,6 +41,8 @@ public class FSCrawler extends AbstractCrawler{
 
 	private static final String RESOURCE_TYPE_COLLECTION = "http://gedcomx.org/Collection";
 	private static final String RESOURCE_TYPE_DIGITAL_ARTIFACT = "http://gedcomx.org/DigitalArtifact";
+
+	private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
 
 	private List<String> urls;
@@ -100,6 +102,8 @@ public class FSCrawler extends AbstractCrawler{
 	protected String getNextURL(String url) throws URISyntaxException, IOException{
 		if(urls == null){
 			String data = "{\"type\":\"image-data\",\"args\":{\"imageURL\":\"" + url + "\",\"state\":{}}}";
+			Request req = Request.createImageRequest(url);
+			String bla = JSON_MAPPER.writeValueAsString(req);
 			JsonNode response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
 			String self = null;
@@ -118,7 +122,7 @@ public class FSCrawler extends AbstractCrawler{
 					}
 				}
 			if(filmNumber != null){
-				data = "{\"type\":\"film-data\",\"args\":{\"dgsNum\":\"" + filmNumber + "\",\"state\":{},\"locale\":\"en\"}}";
+				data = "{\"type\":\"film-data\",\"args\":{\"dgsNum\":\"" + filmNumber + "\",\"state\":{}}}";
 				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
 				ArrayNode images = (ArrayNode)response.path("images");
@@ -132,7 +136,7 @@ public class FSCrawler extends AbstractCrawler{
 				if(self == null)
 					throw new IOException("Cannot find next URL from '" + sourceDescriptions.toString() + "'");
 
-				data = "{\"type\":\"waypoint-data\",\"args\":{\"waypointURL\":\"" + self + "\",\"state\":{},\"locale\":\"en\"}}";
+				data = "{\"type\":\"waypoint-data\",\"args\":{\"waypointURL\":\"" + self + "\",\"state\":{}}}";
 				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
 				ArrayNode images = (ArrayNode)response.path("images");

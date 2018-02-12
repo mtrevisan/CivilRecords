@@ -1,7 +1,6 @@
 package unit731.civilrecords.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
@@ -28,7 +27,6 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
@@ -63,8 +61,6 @@ public abstract class AbstractCrawler{
 	protected AbstractCrawler(int waitTime){
 		this.waitTime = waitTime;
 	}
-	private static final Matcher FAMILYSEARCH_CATALOG_SCRIPT_CLEANER = Pattern.compile("var\\s+data\\s*=\\s*([^;]+?);").matcher("");
-	private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
 	public void startThread(String archiveURL, Long catalogNumber, String username, String password, String outputFilePath){
 		if(thread != null)
@@ -89,6 +85,11 @@ public abstract class AbstractCrawler{
 					if(catalogNumber != null){
 						try{
 							//extract list of archiveURLs
+							String URL_FAMILYSEARCH = "https://www.familysearch.org";
+							String URL_FAMILYSEARCH_DATA = URL_FAMILYSEARCH + "/search/filmdatainfo";
+							String data = "{\"type\":\"film-data\",\"args\":{\"dgsNum\":\"" + catalogNumber + "\",\"state\":{}}}";
+							JsonNode response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
+
 							String catalogURL = "https://www.familysearch.org/search/catalog/" + catalogNumber;
 							String catalogContent = HttpUtils.getRequestAsContent(catalogURL)
 								.asString(StandardCharsets.UTF_8);
@@ -97,21 +98,8 @@ public abstract class AbstractCrawler{
 							if(elems.isEmpty())
 								throw new IOException("Invalid catalog number in URL " + catalogURL);
 							
-							JsonNode tree = null;
-							for(Element elem : elems){
-								String scriptContent = elem.html();
-								if(scriptContent.contains("\"" + catalogNumber + "\"")){
-									FAMILYSEARCH_CATALOG_SCRIPT_CLEANER.reset(scriptContent);
-									if(FAMILYSEARCH_CATALOG_SCRIPT_CLEANER.find()){
-										String dataContent = FAMILYSEARCH_CATALOG_SCRIPT_CLEANER.group(1);
-										tree = JSON_MAPPER.readTree(dataContent);
-										
-										break;
-									}
-								}
-							}
-							String filenamePrefix = tree.path("title").get(0).asText("place");
-							ArrayNode list = (ArrayNode)tree.get("film_note");
+							String filenamePrefix = response.path("catalogs").path("title").get(0).asText("place");
+							ArrayNode list = (ArrayNode)response.get("film_note");
 							for(JsonNode node : list){
 								String filenameSuffix = node.path("text").get(0).asText("");
 								String filmNumber = node.path("filmno").get(0).asText(null);
