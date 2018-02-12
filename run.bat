@@ -62,7 +62,4 @@ rem Giuditta Morassutti
 rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CS7X-Y4PY-8 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Gruaro birth 1909-1916, 1920, 1912, 1920-1929.pdf"
 
 rem Vera Cruz, Quintana
-rem Campinas Maria Ines Arrivabene 19580411
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CS65-6SB4-F -u abcdef3 -p fermi123 -o "D:\Mauro\Campinas birth 195803-195804.pdf"
-java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSDK-P9RL-J -u abcdef3 -p fermi123 -o "D:\Mauro\Campinas birth 195803-195805.pdf"
 rem Jaboticabal, Ibiraçu, Paulopolis, Rio Ubas (Joao Neiva), Vasconcelos, Vitoria, Santa Cruz, Santos, Sao Carlos, Sao Francisco
