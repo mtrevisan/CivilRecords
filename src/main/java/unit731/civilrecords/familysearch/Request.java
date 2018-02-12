@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.HashMap;
 import java.util.Map;
+import unit731.civilrecords.services.HttpUtils;
 
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class Request{
+public class Request extends HttpUtils.RequestBody{
 
 	private static final String KEY_IMAGE_URL = "imageURL";
 	private static final String KEY_FILM_NUMBER = "dgsNum";
