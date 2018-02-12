@@ -40,6 +40,8 @@ public class HttpUtils{
 
 	private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
+	public static class RequestBody{};
+
 
 	private static final ResponseHandler<JsonNode> JSONNODE_CONTENT_HANDLER = (HttpResponse response) -> {
 		StatusLine statusLine = response.getStatusLine();
@@ -91,6 +93,11 @@ public class HttpUtils{
 		}
 	}
 
+	public static Content postWithBodyAsRawRequestAsContent(String url, RequestBody body) throws IOException{
+		String data = JSON_MAPPER.writeValueAsString(body);
+		return postWithBodyAsRawRequestAsContent(url, data);
+	}
+
 	public static JsonNode postWithBodyAsJsonRequestAsJson(String url, String body) throws IOException{
 		try{
 			Executor exec = Executor.newInstance(CLIENT);
@@ -103,6 +110,11 @@ public class HttpUtils{
 		catch(IOException e){
 			throw e;
 		}
+	}
+
+	public static JsonNode postWithBodyAsJsonRequestAsJson(String url, RequestBody body) throws IOException{
+		String data = JSON_MAPPER.writeValueAsString(body);
+		return postWithBodyAsJsonRequestAsJson(url, data);
 	}
 
 }
