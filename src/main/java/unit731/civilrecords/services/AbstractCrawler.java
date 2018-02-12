@@ -64,7 +64,16 @@ public abstract class AbstractCrawler{
 		thread = new Thread(){
 			@Override
 			public void run(){
-				readDocument(archiveURL, username, password, outputFilePath);
+				boolean loggedIn = false;
+				try{
+					loggedIn = login(username, password);
+				}
+				catch(IOException e){
+					LOGGER.log(Level.SEVERE, null, e);
+				}
+
+				if(loggedIn)
+					readDocument(archiveURL, username, password, outputFilePath);
 			}
 		};
 
@@ -96,8 +105,6 @@ public abstract class AbstractCrawler{
 			document.open();
 
 			System.out.format("Created PDF: %s" + LINE_SEPARATOR, outputFilePath);
-
-			login(username, password);
 
 			startingURL = archiveURL;
 			nextURLToDownload = readNextURLToDownload(archiveURL);
@@ -209,7 +216,9 @@ public abstract class AbstractCrawler{
 		return path.toString();
 	}
 
-	protected void login(String username, String password) throws IOException{}
+	protected boolean login(String username, String password) throws IOException{
+		return true;
+	}
 
 	protected abstract String extractPage(String url, Document document, PdfWriter writer) throws IOException;
 

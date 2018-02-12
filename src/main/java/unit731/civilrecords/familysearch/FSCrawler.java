@@ -54,7 +54,7 @@ public class FSCrawler extends AbstractCrawler{
 	}
 
 	@Override
-	protected void login(String username, String password) throws IOException{
+	protected boolean login(String username, String password) throws IOException{
 		if(!loggedIn){
 			String preLoginContent = HttpUtils.getRequestAsContent(URL_FAMILYSEARCH_PRE_LOGIN)
 				.asString(StandardCharsets.UTF_8);
@@ -78,6 +78,8 @@ public class FSCrawler extends AbstractCrawler{
 
 			loggedIn = true;
 		}
+
+		return loggedIn;
 	}
 
 	@Override
