@@ -67,16 +67,18 @@ public class FSCrawler extends AbstractCrawler{
 			boolean privateComputer = true;
 			List<BasicNameValuePair> bodyParams = new ArrayList<>();
 			bodyParams.add(new BasicNameValuePair("userName", username));
-			bodyParams.add(new BasicNameValuePair("password", password));
+			bodyParams.add(new BasicNameValuePair("password", password+"as"));
 			bodyParams.add(new BasicNameValuePair("params", params));
 			if(privateComputer)
 				bodyParams.add(new BasicNameValuePair("privateComputer", "on"));
 			String body = URLEncodedUtils.format(bodyParams, StandardCharsets.UTF_8.name());
-			HttpUtils.postWithBodyAsRawRequestAsContent(URL_FAMILYSEARCH_LOGIN, body);
+			String responseContent = HttpUtils.postWithBodyAsRawRequestAsContent(URL_FAMILYSEARCH_LOGIN, body)
+				.asString(StandardCharsets.UTF_8);
+			doc = Jsoup.parse(responseContent);
+			Elements loginResponse = doc.select("div[id=errorAuthentication]");
+			loggedIn = loginResponse.isEmpty();
 
-			System.out.format("Login done" + LINE_SEPARATOR);
-
-			loggedIn = true;
+			System.out.format(loggedIn? "Login done" + LINE_SEPARATOR: "Login error: " + loginResponse.get(0).ownText());
 		}
 
 		return loggedIn;
