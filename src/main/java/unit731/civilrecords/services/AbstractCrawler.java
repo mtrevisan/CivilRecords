@@ -73,7 +73,7 @@ public abstract class AbstractCrawler{
 				}
 
 				if(loggedIn)
-					readDocument(archiveURL, username, password, outputFilePath);
+					readDocument(archiveURL, outputFilePath);
 			}
 		};
 
@@ -92,7 +92,7 @@ public abstract class AbstractCrawler{
 		writeNextURLToDownload(nextURLToDownload);
 	}
 
-	private void readDocument(String archiveURL, String username, String password, String outputFilePath){
+	private void readDocument(String archiveURL, String outputFilePath){
 		DescriptiveStatistics stats = new DescriptiveStatistics(4);
 
 		long start = System.currentTimeMillis();
