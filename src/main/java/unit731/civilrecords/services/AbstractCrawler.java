@@ -80,13 +80,13 @@ public abstract class AbstractCrawler{
 				if(catalogNumber != null){
 					try{
 						//extract list of archiveURLs
-						String bla = "https://www.familysearch.org/search/catalog/" + catalogNumber;
-						String catalogContent = HttpUtils.getRequestAsContent(bla)
+						String catalogURL = "https://www.familysearch.org/search/catalog/" + catalogNumber;
+						String catalogContent = HttpUtils.getRequestAsContent(catalogURL)
 							.asString(StandardCharsets.UTF_8);
 						Element doc = Jsoup.parse(catalogContent);
 						Elements elems = doc.getElementsByTag("script");
 						if(elems == null || elems.isEmpty())
-							throw new IOException("Invalid catalog number in URL " + bla);
+							throw new IOException("Invalid catalog number in URL " + catalogURL);
 
 						JsonNode tree = null;
 						for(Element elem : elems){
@@ -106,8 +106,22 @@ public abstract class AbstractCrawler{
 						for(JsonNode node : list){
 							String filenameSuffix = node.path("text").get(0).asText("");
 							String filmNumber = node.path("filmno").get(0).asText(null);
-							//TODO
-							System.out.println(node);
+
+							String filmURL = "https://www.familysearch.org/search/film/" + filmNumber;
+							String filmContent = HttpUtils.getRequestAsContent(filmURL)
+								.asString(StandardCharsets.UTF_8);
+							doc = Jsoup.parse(filmContent);
+							elems = doc.getElementsByTag("img");
+							if(elems == null || elems.isEmpty())
+								throw new IOException("Invalid film number in URL " + filmURL);
+
+							for(Element elem : elems)
+								if("printImage".equals(elem.id())){
+									//TODO
+									System.out.println(elem);
+
+									break;
+								}
 						}
 						//TODO
 					}
