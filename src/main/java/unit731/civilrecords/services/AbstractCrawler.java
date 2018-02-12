@@ -32,7 +32,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.apache.http.client.fluent.Content;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -76,65 +75,75 @@ public abstract class AbstractCrawler{
 		thread = new Thread(){
 			@Override
 			public void run(){
-				List<String> archiveURLs = new ArrayList<>();
-				if(catalogNumber != null){
-					try{
-						//extract list of archiveURLs
-						String catalogURL = "https://www.familysearch.org/search/catalog/" + catalogNumber;
-						String catalogContent = HttpUtils.getRequestAsContent(catalogURL)
-							.asString(StandardCharsets.UTF_8);
-						Element doc = Jsoup.parse(catalogContent);
-						Elements elems = doc.getElementsByTag("script");
-						if(elems == null || elems.isEmpty())
-							throw new IOException("Invalid catalog number in URL " + catalogURL);
+				boolean loggedIn = false;
+				try{
+					loggedIn = login(username, password);
+				}
+				catch(IOException e){
+					LOGGER.log(Level.SEVERE, null, e);
+				}
 
-						JsonNode tree = null;
-						for(Element elem : elems){
-							String scriptContent = elem.html();
-							if(scriptContent.contains("\"" + catalogNumber + "\"")){
-								FAMILYSEARCH_CATALOG_SCRIPT_CLEANER.reset(scriptContent);
-								if(FAMILYSEARCH_CATALOG_SCRIPT_CLEANER.find()){
-									String dataContent = FAMILYSEARCH_CATALOG_SCRIPT_CLEANER.group(1);
-									tree = JSON_MAPPER.readTree(dataContent);
 
-									break;
+				if(loggedIn){
+					List<String> archiveURLs = new ArrayList<>();
+					if(catalogNumber != null){
+						try{
+							//extract list of archiveURLs
+							String catalogURL = "https://www.familysearch.org/search/catalog/" + catalogNumber;
+							String catalogContent = HttpUtils.getRequestAsContent(catalogURL)
+								.asString(StandardCharsets.UTF_8);
+							Element doc = Jsoup.parse(catalogContent);
+							Elements elems = doc.getElementsByTag("script");
+							if(elems == null || elems.isEmpty())
+								throw new IOException("Invalid catalog number in URL " + catalogURL);
+							
+							JsonNode tree = null;
+							for(Element elem : elems){
+								String scriptContent = elem.html();
+								if(scriptContent.contains("\"" + catalogNumber + "\"")){
+									FAMILYSEARCH_CATALOG_SCRIPT_CLEANER.reset(scriptContent);
+									if(FAMILYSEARCH_CATALOG_SCRIPT_CLEANER.find()){
+										String dataContent = FAMILYSEARCH_CATALOG_SCRIPT_CLEANER.group(1);
+										tree = JSON_MAPPER.readTree(dataContent);
+										
+										break;
+									}
 								}
 							}
+							String filenamePrefix = tree.path("title").get(0).asText("place");
+							ArrayNode list = (ArrayNode)tree.get("film_note");
+							for(JsonNode node : list){
+								String filenameSuffix = node.path("text").get(0).asText("");
+								String filmNumber = node.path("filmno").get(0).asText(null);
+								
+								String filmURL = "https://www.familysearch.org/search/film/" + filmNumber;
+								String filmContent = HttpUtils.getRequestAsContent(filmURL)
+									.asString(StandardCharsets.UTF_8);
+								doc = Jsoup.parse(filmContent);
+								elems = doc.getElementsByTag("img");
+								if(elems == null || elems.isEmpty())
+									throw new IOException("Invalid film number in URL " + filmURL);
+								
+								for(Element elem : elems)
+									if("printImage".equals(elem.id())){
+										//TODO
+										System.out.println(elem);
+										
+										break;
+									}
+							}
+							//TODO
 						}
-						String filenamePrefix = tree.path("title").get(0).asText("place");
-						ArrayNode list = (ArrayNode)tree.get("film_note");
-						for(JsonNode node : list){
-							String filenameSuffix = node.path("text").get(0).asText("");
-							String filmNumber = node.path("filmno").get(0).asText(null);
-
-							String filmURL = "https://www.familysearch.org/search/film/" + filmNumber;
-							String filmContent = HttpUtils.getRequestAsContent(filmURL)
-								.asString(StandardCharsets.UTF_8);
-							doc = Jsoup.parse(filmContent);
-							elems = doc.getElementsByTag("img");
-							if(elems == null || elems.isEmpty())
-								throw new IOException("Invalid film number in URL " + filmURL);
-
-							for(Element elem : elems)
-								if("printImage".equals(elem.id())){
-									//TODO
-									System.out.println(elem);
-
-									break;
-								}
+						catch(IOException ex){
+							Logger.getLogger(AbstractCrawler.class.getName()).log(Level.SEVERE, null, ex);
 						}
-						//TODO
 					}
-					catch(IOException ex){
-						Logger.getLogger(AbstractCrawler.class.getName()).log(Level.SEVERE, null, ex);
-					}
-
+					else
+						archiveURLs.add(archiveURL);
+					
+					for(String url : archiveURLs)
+						readDocument(url, outputFilePath);
 				}
-				else
-					archiveURLs.add(archiveURL);
-
-				for(String url : archiveURLs)
-					readDocument(url, username, password, outputFilePath);
 			}
 		};
 
@@ -153,7 +162,7 @@ public abstract class AbstractCrawler{
 		writeNextURLToDownload(nextURLToDownload);
 	}
 
-	private void readDocument(String archiveURL, String username, String password, String outputFilePath){
+	private void readDocument(String archiveURL, String outputFilePath){
 		DescriptiveStatistics stats = new DescriptiveStatistics(4);
 
 		long start = System.currentTimeMillis();
@@ -166,8 +175,6 @@ public abstract class AbstractCrawler{
 			document.open();
 
 			System.out.format("Created PDF: %s" + LINE_SEPARATOR, outputFilePath);
-
-			login(username, password);
 
 			startingURL = archiveURL;
 			nextURLToDownload = readNextURLToDownload(archiveURL);
@@ -279,7 +286,9 @@ public abstract class AbstractCrawler{
 		return path.toString();
 	}
 
-	protected void login(String username, String password) throws IOException{}
+	protected boolean login(String username, String password) throws IOException{
+		return true;
+	}
 
 	protected abstract String extractPage(String url, Document document, PdfWriter writer) throws IOException;
 

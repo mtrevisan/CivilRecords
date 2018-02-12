@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.http.client.fluent.Content;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.jsoup.Jsoup;
@@ -55,7 +56,7 @@ public class FSCrawler extends AbstractCrawler{
 	}
 
 	@Override
-	protected void login(String username, String password) throws IOException{
+	protected boolean login(String username, String password) throws IOException{
 		if(!loggedIn){
 			String preLoginContent = HttpUtils.getRequestAsContent(URL_FAMILYSEARCH_PRE_LOGIN)
 				.asString(StandardCharsets.UTF_8);
@@ -73,12 +74,14 @@ public class FSCrawler extends AbstractCrawler{
 			if(privateComputer)
 				bodyParams.add(new BasicNameValuePair("privateComputer", "on"));
 			String body = URLEncodedUtils.format(bodyParams, StandardCharsets.UTF_8.name());
-			HttpUtils.postWithBodyAsRawRequestAsContent(URL_FAMILYSEARCH_LOGIN, body);
+			Content response = HttpUtils.postWithBodyAsRawRequestAsContent(URL_FAMILYSEARCH_LOGIN, body);
 
 			System.out.format("Login done" + LINE_SEPARATOR);
 
 			loggedIn = true;
 		}
+
+		return loggedIn;
 	}
 
 	@Override
