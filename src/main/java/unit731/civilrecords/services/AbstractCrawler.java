@@ -94,7 +94,7 @@ public abstract class AbstractCrawler{
 								.asString(StandardCharsets.UTF_8);
 							Element doc = Jsoup.parse(catalogContent);
 							Elements elems = doc.getElementsByTag("script");
-							if(elems == null || elems.isEmpty())
+							if(elems.isEmpty())
 								throw new IOException("Invalid catalog number in URL " + catalogURL);
 							
 							JsonNode tree = null;
@@ -121,7 +121,7 @@ public abstract class AbstractCrawler{
 									.asString(StandardCharsets.UTF_8);
 								doc = Jsoup.parse(filmContent);
 								elems = doc.getElementsByTag("img");
-								if(elems == null || elems.isEmpty())
+								if(elems.isEmpty())
 									throw new IOException("Invalid film number in URL " + filmURL);
 								
 								for(Element elem : elems)
