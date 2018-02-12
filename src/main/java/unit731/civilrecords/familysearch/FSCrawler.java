@@ -100,7 +100,7 @@ public class FSCrawler extends AbstractCrawler{
 	@Override
 	protected String getNextURL(String url) throws URISyntaxException, IOException{
 		if(urls == null){
-			HttpUtils.RequestBody data = Request.createImageRequest(url);
+			HttpUtils.RequestBody data = FSRequest.createImageRequest(url);
 			JsonNode response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
 			String self = null;
@@ -119,7 +119,7 @@ public class FSCrawler extends AbstractCrawler{
 					}
 				}
 			if(filmNumber != null){
-				data = Request.createFilmRequest(filmNumber);
+				data = FSRequest.createFilmRequest(filmNumber);
 				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
 				ArrayNode images = (ArrayNode)response.path("images");
@@ -133,7 +133,7 @@ public class FSCrawler extends AbstractCrawler{
 				if(self == null)
 					throw new IOException("Cannot find next URL from '" + sourceDescriptions.toString() + "'");
 
-				data = Request.createFilmRequest(self);
+				data = FSRequest.createFilmRequest(self);
 				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
 				ArrayNode images = (ArrayNode)response.path("images");

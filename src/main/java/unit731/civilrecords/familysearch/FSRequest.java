@@ -9,7 +9,7 @@ import unit731.civilrecords.services.HttpUtils;
 
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class Request extends HttpUtils.RequestBody{
+public class FSRequest extends HttpUtils.RequestBody{
 
 	private static final String KEY_IMAGE_URL = "imageURL";
 	private static final String KEY_FILM_NUMBER = "dgsNum";
@@ -42,27 +42,27 @@ public class Request extends HttpUtils.RequestBody{
 	private final Map<String, Object> args = new HashMap<>();
 
 
-	private Request(){}
+	private FSRequest(){}
 
-	private Request(Type type){
+	private FSRequest(Type type){
 		this.type = type;
 		args.put(KEY_STATE, Collections.emptyMap());
 	}
 
-	public static final Request createImageRequest(String imageURL){
-		Request request = new Request(Type.IMAGE_DATA);
+	public static final FSRequest createImageRequest(String imageURL){
+		FSRequest request = new FSRequest(Type.IMAGE_DATA);
 		request.args.put(KEY_IMAGE_URL, imageURL);
 		return request;
 	}
 
-	public static final Request createFilmRequest(String filmNumber){
-		Request request = new Request(Type.FILM_DATA);
+	public static final FSRequest createFilmRequest(String filmNumber){
+		FSRequest request = new FSRequest(Type.FILM_DATA);
 		request.args.put(KEY_FILM_NUMBER, filmNumber);
 		return request;
 	}
 
-	public static final Request createWaypointRequest(String waypointURL){
-		Request request = new Request(Type.WAYPOINT_DATA);
+	public static final FSRequest createWaypointRequest(String waypointURL){
+		FSRequest request = new FSRequest(Type.WAYPOINT_DATA);
 		request.args.put(KEY_WAYPOINT_URL, waypointURL);
 		return request;
 	}
