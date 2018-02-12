@@ -44,27 +44,26 @@ public class Request extends HttpUtils.RequestBody{
 
 	private Request(){}
 
+	private Request(Type type){
+		this.type = type;
+		args.put(KEY_STATE, Collections.emptyMap());
+	}
+
 	public static final Request createImageRequest(String imageURL){
-		Request request = new Request();
-		request.type = Type.IMAGE_DATA;
+		Request request = new Request(Type.IMAGE_DATA);
 		request.args.put(KEY_IMAGE_URL, imageURL);
-		request.args.put(KEY_STATE, Collections.emptyMap());
 		return request;
 	}
 
 	public static final Request createFilmRequest(String filmNumber){
-		Request request = new Request();
-		request.type = Type.FILM_DATA;
+		Request request = new Request(Type.FILM_DATA);
 		request.args.put(KEY_FILM_NUMBER, filmNumber);
-		request.args.put(KEY_STATE, Collections.emptyMap());
 		return request;
 	}
 
 	public static final Request createWaypointRequest(String waypointURL){
-		Request request = new Request();
-		request.type = Type.WAYPOINT_DATA;
+		Request request = new Request(Type.WAYPOINT_DATA);
 		request.args.put(KEY_WAYPOINT_URL, waypointURL);
-		request.args.put(KEY_STATE, Collections.emptyMap());
 		return request;
 	}
 
