@@ -120,6 +120,7 @@ public class FSCrawler extends AbstractCrawler{
 			if(filmNumber == null)
 				throw new IOException("Cannot find next URL from '" + sourceDescriptions.toString() + "'");
 
+
 			data = FSRequest.createFilmRequest(filmNumber);
 			response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
@@ -130,6 +131,7 @@ public class FSCrawler extends AbstractCrawler{
 				.collect(Collectors.toList());
 			totalPages = urls.size();
 		}
+
 		currentPageIndex = urls.indexOf(FAMILYSEARCH_URL_CLEANER.reset(url).replaceFirst("$1"));
 		if(currentPageIndex < 0)
 			currentPageIndex = 0;
