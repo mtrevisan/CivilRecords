@@ -40,18 +40,22 @@ import org.jsoup.select.Elements;
 
 public abstract class AbstractCrawler{
 
+	private static final Logger LOGGER = Logger.getLogger(AbstractCrawler.class.getName());
+
 	//[ms]
 	public static final int WAIT_TIME = 10_000;
+	//[ms]
 	public static final int INTERRUPT_WAIT_TIME = 2 * 60 * 1000;
 
 	private static final String CONFIG_FILE = "config.properties";
 	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
+
 	private final int waitTime;
 
 	private Thread thread;
 	protected volatile boolean shutdown;
-	protected boolean shutdownBeforeCurrentPage;
+	protected volatile boolean shutdownBeforeCurrentPage;
 
 	private String startingURL;
 	private String nextURLToDownload;
@@ -132,10 +136,7 @@ public abstract class AbstractCrawler{
 		}
 		catch(InterruptedException e){}
 
-		if(nextURLToDownload != null)
-			writeNextURLToDownload(nextURLToDownload);
-		else
-			writeNextURLToDownload(null);
+		writeNextURLToDownload(nextURLToDownload);
 	}
 
 	private void readDocument(String archiveURL, String username, String password, String outputFilePath){
@@ -169,7 +170,7 @@ public abstract class AbstractCrawler{
 			}
 		}
 		catch(IOException | DocumentException e){
-			Logger.getLogger(AbstractCrawler.class.getName()).log(Level.SEVERE, null, e);
+			LOGGER.log(Level.SEVERE, null, e);
 		}
 		finally{
 			document.close();
@@ -206,7 +207,7 @@ public abstract class AbstractCrawler{
 				prop.load(input);
 			}
 			catch(IOException e){
-				Logger.getLogger(AbstractCrawler.class.getName()).log(Level.SEVERE, null, e);
+				LOGGER.log(Level.SEVERE, null, e);
 			}
 		}
 
@@ -219,7 +220,7 @@ public abstract class AbstractCrawler{
 			prop.store(output, null);
 		}
 		catch(IOException e){
-			Logger.getLogger(AbstractCrawler.class.getName()).log(Level.SEVERE, null, e);
+			LOGGER.log(Level.SEVERE, null, e);
 		}
 	}
 
@@ -228,7 +229,7 @@ public abstract class AbstractCrawler{
 //			Files.deleteIfExists(Paths.get(filename));
 //		}
 //		catch(IOException e){
-//			Logger.getLogger(AbstractCrawler.class.getName()).log(Level.SEVERE, null, e);
+//			LOGGER.log(Level.SEVERE, null, e);
 //		}
 //	}
 
@@ -279,7 +280,7 @@ public abstract class AbstractCrawler{
 			}
 			catch(DocumentException | IOException | URISyntaxException e){
 //				System.out.format("\n");
-//				Logger.getLogger(AbstractCrawler.class.getName()).log(Level.SEVERE, null, e);
+//				LOGGER.log(Level.SEVERE, null, e);
 
 				if(shutdown){
 					shutdownBeforeCurrentPage = true;
@@ -301,7 +302,7 @@ public abstract class AbstractCrawler{
 			}
 			catch(IOException | URISyntaxException e){
 //				System.out.format("\n");
-//				Logger.getLogger(AbstractCrawler.class.getName()).log(Level.SEVERE, null, e);
+//				LOGGER.log(Level.SEVERE, null, e);
 
 				try{ Thread.sleep(waitTime); }
 				catch(InterruptedException ie){}
