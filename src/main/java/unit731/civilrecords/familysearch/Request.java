@@ -32,7 +32,6 @@ public class Request{
 
 	private Type type;
 	private final Map<String, Object> args = new HashMap<>();
-	private final Map<String, Object> state = new HashMap<>();
 
 
 	private Request(){}
@@ -41,6 +40,7 @@ public class Request{
 		Request request = new Request();
 		request.type = Type.IMAGE_DATA;
 		request.args.put("imageURL", imageURL);
+		request.args.put("state", new HashMap<>());
 		return request;
 	}
 
@@ -48,6 +48,7 @@ public class Request{
 		Request request = new Request();
 		request.type = Type.FILM_DATA;
 		request.args.put("dgsNum", filmNumber);
+		request.args.put("state", new HashMap<>());
 		return request;
 	}
 
@@ -55,6 +56,7 @@ public class Request{
 		Request request = new Request();
 		request.type = Type.WAYPOINT_DATA;
 		request.args.put("waypointURL", waypointURL);
+		request.args.put("state", new HashMap<>());
 		return request;
 	}
 
