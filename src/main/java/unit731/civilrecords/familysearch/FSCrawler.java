@@ -80,7 +80,7 @@ public class FSCrawler extends AbstractCrawler{
 			Elements loginResponse = doc.select("div[id=errorAuthentication]");
 			loggedIn = loginResponse.isEmpty();
 
-			System.out.format(loggedIn? "Login done" + LINE_SEPARATOR: "Login error: " + loginResponse.get(0).ownText());
+			System.out.format((loggedIn? "Login done": "Login error: " + loginResponse.get(0).ownText()) + LINE_SEPARATOR);
 		}
 
 		return loggedIn;
