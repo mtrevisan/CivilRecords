@@ -2,6 +2,7 @@ package unit731.civilrecords.familysearch;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import unit731.civilrecords.services.HttpUtils;
@@ -47,7 +48,7 @@ public class Request extends HttpUtils.RequestBody{
 		Request request = new Request();
 		request.type = Type.IMAGE_DATA;
 		request.args.put(KEY_IMAGE_URL, imageURL);
-		request.args.put(KEY_STATE, new HashMap<>());
+		request.args.put(KEY_STATE, Collections.emptyMap());
 		return request;
 	}
 
@@ -55,7 +56,7 @@ public class Request extends HttpUtils.RequestBody{
 		Request request = new Request();
 		request.type = Type.FILM_DATA;
 		request.args.put(KEY_FILM_NUMBER, filmNumber);
-		request.args.put(KEY_STATE, new HashMap<>());
+		request.args.put(KEY_STATE, Collections.emptyMap());
 		return request;
 	}
 
@@ -63,7 +64,7 @@ public class Request extends HttpUtils.RequestBody{
 		Request request = new Request();
 		request.type = Type.WAYPOINT_DATA;
 		request.args.put(KEY_WAYPOINT_URL, waypointURL);
-		request.args.put(KEY_STATE, new HashMap<>());
+		request.args.put(KEY_STATE, Collections.emptyMap());
 		return request;
 	}
 

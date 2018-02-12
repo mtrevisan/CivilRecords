@@ -38,20 +38,19 @@ public class Main{
 
 			Site site = Site.valueOf(cmd.getOptionValue("site"));
 			String archiveURL = cmd.getOptionValue("archive");
-			String catalog = cmd.getOptionValue("catalog");
+			String catalogNumber = cmd.getOptionValue("catalog");
 			String username = cmd.getOptionValue("username");
 			String password = cmd.getOptionValue("password");
 			if(site == Site.FS && (username == null || username.trim().length() == 0 || password == null) || password.trim().length() == 0)
 				throw new ParseException("If -site is FS then the username (option -username) and password (option -password) should be provided");
-			if(site == Site.FS && !(archiveURL == null ^ catalog == null))
+			if(site == Site.FS && !(archiveURL == null ^ catalogNumber == null))
 				throw new ParseException("If -site is FS then either archive URL (option -archive) or catalog number (option -catalog) should be provided");
-			Long catalogNumber = null;
-			if(catalog != null){
+			if(catalogNumber != null){
 				try{
-					catalogNumber = Long.valueOf(catalog);
+					Long.valueOf(catalogNumber);
 				}
 				catch(NumberFormatException e){
-					throw new ParseException("Catalog number (option -catalog) is not a number ('" + catalog + "')");
+					throw new ParseException("Catalog number (option -catalog) is not a number ('" + catalogNumber + "')");
 				}
 			}
 

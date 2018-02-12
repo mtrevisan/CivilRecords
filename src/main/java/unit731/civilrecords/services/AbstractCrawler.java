@@ -33,6 +33,7 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import unit731.civilrecords.familysearch.Request;
 
 
 public abstract class AbstractCrawler{
@@ -62,7 +63,7 @@ public abstract class AbstractCrawler{
 		this.waitTime = waitTime;
 	}
 
-	public void startThread(String archiveURL, Long catalogNumber, String username, String password, String outputFilePath){
+	public void startThread(String archiveURL, String catalogNumber, String username, String password, String outputFilePath){
 		if(thread != null)
 			stopThread();
 
@@ -87,7 +88,7 @@ public abstract class AbstractCrawler{
 							//extract list of archiveURLs
 							String URL_FAMILYSEARCH = "https://www.familysearch.org";
 							String URL_FAMILYSEARCH_DATA = URL_FAMILYSEARCH + "/search/filmdatainfo";
-							String data = "{\"type\":\"film-data\",\"args\":{\"dgsNum\":\"" + catalogNumber + "\",\"state\":{}}}";
+							HttpUtils.RequestBody data = Request.createFilmRequest(catalogNumber);
 							JsonNode response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
 							String catalogURL = "https://www.familysearch.org/search/catalog/" + catalogNumber;
