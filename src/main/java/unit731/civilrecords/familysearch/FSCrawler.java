@@ -69,7 +69,7 @@ public class FSCrawler extends AbstractCrawler{
 			boolean privateComputer = true;
 			List<BasicNameValuePair> bodyParams = new ArrayList<>();
 			bodyParams.add(new BasicNameValuePair("userName", username));
-			bodyParams.add(new BasicNameValuePair("password", password+"as"));
+			bodyParams.add(new BasicNameValuePair("password", password));
 			bodyParams.add(new BasicNameValuePair("params", params));
 			if(privateComputer)
 				bodyParams.add(new BasicNameValuePair("privateComputer", "on"));
