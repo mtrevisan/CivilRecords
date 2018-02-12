@@ -62,4 +62,13 @@ rem Giuditta Morassutti
 rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CS7X-Y4PY-8 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Gruaro birth 1909-1916, 1920, 1912, 1920-1929.pdf"
 
 rem Vera Cruz, Quintana
-rem Jaboticabal, Ibiraçu, Paulopolis, Rio Ubas (Joao Neiva), Vasconcelos, Vitoria, Santa Cruz, Santos, Sao Carlos, Sao Francisco
+
+rem Jaboticabal: Onorio Zaros
+java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSDY-Z9GC-1 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Jaboticabal death 192905-192912.pdf"
+java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSFT-Q9XK-H -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Jaboticabal death 192905-193007.pdf"
+
+rem Paulópolis (Pompéia)
+java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSVS-L96C-B -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Pompéia marriage 194008-194308.pdf"
+
+rem São Carlos birth Américo Mantelli 19200920
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1: -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Santa Cruz marriage 190003.pdf"
