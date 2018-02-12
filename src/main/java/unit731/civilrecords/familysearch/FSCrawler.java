@@ -103,14 +103,13 @@ public class FSCrawler extends AbstractCrawler{
 			HttpUtils.RequestBody data = FSRequest.createImageRequest(url);
 			JsonNode response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
-			String self = null;
 			String filmNumber = null;
 			ArrayNode sourceDescriptions = (ArrayNode)response.path("meta").path("sourceDescriptions");
 			for(JsonNode sourceDescription : sourceDescriptions)
 				if(sourceDescription.has("rights")){
 					String resourceType = sourceDescription.path("resourceType").asText(null);
 					if(RESOURCE_TYPE_COLLECTION.equals(resourceType)){
-						self = sourceDescription.path("identifiers").path(RESOURCE_TYPE_PRIMARY).get(0).asText(null);
+						filmNumber = sourceDescription.path("identifiers").path(RESOURCE_TYPE_PRIMARY).get(0).asText(null);
 						break;
 					}
 					else if(RESOURCE_TYPE_DIGITAL_ARTIFACT.equals(resourceType)){
@@ -118,31 +117,18 @@ public class FSCrawler extends AbstractCrawler{
 						break;
 					}
 				}
-			if(filmNumber != null){
-				data = FSRequest.createFilmRequest(filmNumber);
-				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
+			if(filmNumber == null)
+				throw new IOException("Cannot find next URL from '" + sourceDescriptions.toString() + "'");
 
-				ArrayNode images = (ArrayNode)response.path("images");
-				urls = StreamSupport.stream(images.spliterator(), false)
-					.map(JsonNode::asText)
-					.map(str -> FAMILYSEARCH_URL_CLEANER.reset(str).replaceFirst("$1"))
-					.collect(Collectors.toList());
-				totalPages = urls.size();
-			}
-			else{
-				if(self == null)
-					throw new IOException("Cannot find next URL from '" + sourceDescriptions.toString() + "'");
+			data = FSRequest.createFilmRequest(filmNumber);
+			response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
-				data = FSRequest.createFilmRequest(self);
-				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
-
-				ArrayNode images = (ArrayNode)response.path("images");
-				urls = StreamSupport.stream(images.spliterator(), false)
-					.map(JsonNode::asText)
-					.map(str -> str.substring(0, str.indexOf('?')))
-					.collect(Collectors.toList());
-				totalPages = urls.size();
-			}
+			ArrayNode images = (ArrayNode)response.path("images");
+			urls = StreamSupport.stream(images.spliterator(), false)
+				.map(JsonNode::asText)
+				.map(str -> FAMILYSEARCH_URL_CLEANER.reset(str).replaceFirst("$1"))
+				.collect(Collectors.toList());
+			totalPages = urls.size();
 		}
 		currentPageIndex = urls.indexOf(FAMILYSEARCH_URL_CLEANER.reset(url).replaceFirst("$1"));
 		if(currentPageIndex < 0)
