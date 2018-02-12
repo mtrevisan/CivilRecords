@@ -101,9 +101,7 @@ public class FSCrawler extends AbstractCrawler{
 	@Override
 	protected String getNextURL(String url) throws URISyntaxException, IOException{
 		if(urls == null){
-			String data = "{\"type\":\"image-data\",\"args\":{\"imageURL\":\"" + url + "\",\"state\":{}}}";
-			Request req = Request.createImageRequest(url);
-			String bla = JSON_MAPPER.writeValueAsString(req);
+			String data = JSON_MAPPER.writeValueAsString(Request.createImageRequest(url));
 			JsonNode response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
 			String self = null;
@@ -122,7 +120,7 @@ public class FSCrawler extends AbstractCrawler{
 					}
 				}
 			if(filmNumber != null){
-				data = "{\"type\":\"film-data\",\"args\":{\"dgsNum\":\"" + filmNumber + "\",\"state\":{}}}";
+				data = JSON_MAPPER.writeValueAsString(Request.createFilmRequest(filmNumber));
 				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
 				ArrayNode images = (ArrayNode)response.path("images");
@@ -136,7 +134,7 @@ public class FSCrawler extends AbstractCrawler{
 				if(self == null)
 					throw new IOException("Cannot find next URL from '" + sourceDescriptions.toString() + "'");
 
-				data = "{\"type\":\"waypoint-data\",\"args\":{\"waypointURL\":\"" + self + "\",\"state\":{}}}";
+				data = JSON_MAPPER.writeValueAsString(Request.createFilmRequest(self));
 				response = HttpUtils.postWithBodyAsJsonRequestAsJson(URL_FAMILYSEARCH_DATA, data);
 
 				ArrayNode images = (ArrayNode)response.path("images");
