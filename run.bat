@@ -61,14 +61,28 @@ rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33SQ-G5ZF-WN3 -u abcdef3 
 rem Giuditta Morassutti
 rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CS7X-Y4PY-8 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Gruaro birth 1909-1916, 1920, 1912, 1920-1929.pdf"
 
-rem Vera Cruz, Quintana
+rem Mantelli
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3QSQ-G9WB-84M7 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Cardinale birth 1866-1907.pdf"
 
-rem Jaboticabal: Onorio Zaros
-java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSDY-Z9GC-1 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Jaboticabal death 192905-192912.pdf"
-java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSFT-Q9XK-H -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Jaboticabal death 192905-193007.pdf"
+rem Giacomini, dall'Acqua, Maschio
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33S7-L1G5-S6W -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Roncade Nati 1873.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33S7-L1YJ-943R -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Roncade Nati 1872.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33S7-91G5-T7 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Roncade Nati 1880, 1882.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33S7-91G5-DF -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Roncade Nati 1881.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CS7X-Y4PY-8 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Gruaro birth 1909-1916, 1920, 1912, 1920-1929.pdf"
 
-rem Paulópolis (Pompéia)
-java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSVS-L96C-B -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Pompéia marriage 194008-194308.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CS2Q-2L9S -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Santos Batismos, matrimonios e obitos 1906-1961.pdf"
 
-rem São Carlos birth Américo Mantelli 19200920
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1: -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Santa Cruz marriage 190003.pdf"
+rem Marília
+java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CSH5-MNY -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth 193810-193811.pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1: -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1: -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1: -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1: -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1: -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1: -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1: -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1: -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1: -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1: -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
+rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1: -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"

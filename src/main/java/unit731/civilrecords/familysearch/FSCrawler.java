@@ -30,13 +30,13 @@ import unit731.civilrecords.services.HttpUtils;
 public class FSCrawler extends AbstractCrawler{
 
 	private static final String URL_FAMILYSEARCH = "https://www.familysearch.org";
-	private static final String URL_FAMILYSEARCH_ARCHIVE = URL_FAMILYSEARCH + "/ark:/";
+	private static final String URL_FAMILYSEARCH_ARCHIVE = URL_FAMILYSEARCH + "/ark:/61903/3:1:";
 //	private static final String URL_FAMILYSEARCH_CATALOG = URL_FAMILYSEARCH + "/search/catalog/";
 	private static final String URL_FAMILYSEARCH_DATA = URL_FAMILYSEARCH + "/search/filmdatainfo";
 	private static final String URL_FAMILYSEARCH_PRE_LOGIN = URL_FAMILYSEARCH + "/auth/familysearch/login?ldsauth=false";
 	private static final String URL_FAMILYSEARCH_LOGIN = "https://ident.familysearch.org/cis-web/oauth2/v3/authorization";
 
-	private static final Matcher FAMILYSEARCH_URL_CLEANER = Pattern.compile("https?://(?:www.)?familysearch.org/ark:/([^/]+/[^/]+)(?:/image.xml)?").matcher("");
+	private static final Matcher FAMILYSEARCH_URL_CLEANER = Pattern.compile("https?://(?:www.)?familysearch.org/ark:/61903/3:1:([^/]+)(?:/image.xml)?").matcher("");
 
 	private static final String RESOURCE_TYPE = "http://gedcomx.org";
 	private static final String RESOURCE_TYPE_PRIMARY = RESOURCE_TYPE + "/Primary";
