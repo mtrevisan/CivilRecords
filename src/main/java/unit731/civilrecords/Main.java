@@ -41,7 +41,7 @@ public class Main{
 			String catalog = cmd.getOptionValue("catalog");
 			String username = cmd.getOptionValue("username");
 			String password = cmd.getOptionValue("password");
-			if(site == Site.FS && (username == null || username.trim().length() == 0 || password == null) || password.trim().length() == 0)
+			if(site == Site.FS && (username == null || username.trim().length() == 0 || password == null || password.trim().length() == 0))
 				throw new ParseException("If -site is FS then the username (option -username) and password (option -password) should be provided");
 			if(site == Site.FS && !(archiveURL == null ^ catalog == null))
 				throw new ParseException("If -site is FS then either archive URL (option -archive) or catalog number (option -catalog) should be provided");
