@@ -44,6 +44,8 @@ public class SANCrawler extends AbstractCrawler{
 
 				Elements nextLink = doc.select("a.next");
 				nextURL = (nextLink != null && !nextLink.isEmpty()? HttpUtils.cleanURLFromParameters(URL_SAN + nextLink.get(0).attr("href")): null);
+				if(nextURL != null && nextURL.startsWith(URL_SAN_ARCHIVE))
+					nextURL = nextURL.substring(URL_SAN_ARCHIVE.length());
 
 				break;
 			}
