@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FilenameUtils;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.http.client.HttpResponseException;
 
 
 public abstract class AbstractCrawler{
@@ -33,7 +34,9 @@ public abstract class AbstractCrawler{
 	private static final Logger LOGGER = Logger.getLogger(AbstractCrawler.class.getName());
 
 	//[ms]
-	public static final int WAIT_TIME = 10_000;
+	public static final int REQUEST_WAIT_TIME_DEFAULT = 2_000;
+	//[ms]
+	public static final int ERROR_WAIT_TIME_DEFAULT = 10_000;
 	//[ms]
 	public static final int INTERRUPT_WAIT_TIME = 2 * 60 * 1000;
 
@@ -41,9 +44,12 @@ public abstract class AbstractCrawler{
 	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
 
-	private final int waitTime;
+	private final int requestWaitTime;
+	private final int errorWaitTime;
 
 	private Thread thread;
+	private String username;
+	private String password;
 	protected volatile boolean shutdown;
 	protected volatile boolean shutdownBeforeCurrentPage;
 
@@ -51,14 +57,17 @@ public abstract class AbstractCrawler{
 	private String nextURLToDownload;
 
 
-	protected AbstractCrawler(int waitTime){
-		this.waitTime = waitTime;
+	protected AbstractCrawler(int requestWaitTime, int errorWaitTime){
+		this.requestWaitTime = requestWaitTime;
+		this.errorWaitTime = errorWaitTime;
 	}
 
 	public void startThread(String archiveURL, Long catalogNumber, String username, String password, String outputFilePath){
 		if(thread != null)
 			stopThread();
 
+		this.username = username;
+		this.password = password;
 		shutdown = false;
 
 		thread = new Thread(){
@@ -229,7 +238,18 @@ public abstract class AbstractCrawler{
 
 				addImageToDocument(raw, document, writer);
 
+				try{ Thread.sleep(requestWaitTime); }
+				catch(InterruptedException ie){}
+
 				break;
+			}
+			catch(HttpResponseException e){
+				try{
+					login(username, password);
+				}
+				catch(IOException e2){
+					LOGGER.log(Level.SEVERE, null, e);
+				}
 			}
 			catch(DocumentException | IOException | URISyntaxException e){
 //				System.out.format("\n");
@@ -239,7 +259,7 @@ public abstract class AbstractCrawler{
 					shutdownBeforeCurrentPage = true;
 				}
 				else{
-					try{ Thread.sleep(waitTime); }
+					try{ Thread.sleep(errorWaitTime); }
 					catch(InterruptedException ie){}
 				}
 			}
@@ -257,7 +277,7 @@ public abstract class AbstractCrawler{
 //				System.out.format("\n");
 //				LOGGER.log(Level.SEVERE, null, e);
 
-				try{ Thread.sleep(waitTime); }
+				try{ Thread.sleep(errorWaitTime); }
 				catch(InterruptedException ie){}
 			}
 		}

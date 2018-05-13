@@ -26,7 +26,7 @@ public class SANCrawler extends AbstractCrawler{
 
 
 	public SANCrawler(){
-		super(AbstractCrawler.WAIT_TIME);
+		super(0, ERROR_WAIT_TIME_DEFAULT);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class SANCrawler extends AbstractCrawler{
 				if(shutdown)
 					break;
 
-				try{ Thread.sleep(WAIT_TIME); }
+				try{ Thread.sleep(ERROR_WAIT_TIME_DEFAULT); }
 				catch(InterruptedException ie){}
 			}
 		}
