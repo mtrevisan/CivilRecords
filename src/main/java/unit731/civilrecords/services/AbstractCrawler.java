@@ -34,7 +34,7 @@ public abstract class AbstractCrawler{
 	private static final Logger LOGGER = Logger.getLogger(AbstractCrawler.class.getName());
 
 	//[ms]
-	public static final int REQUEST_WAIT_TIME_DEFAULT = 2_000;
+	public static final int REQUEST_WAIT_TIME_DEFAULT = 4_500;
 	//[ms]
 	public static final int ERROR_WAIT_TIME_DEFAULT = 10_000;
 	//[ms]
