@@ -53,7 +53,7 @@ public class FSCrawler extends AbstractCrawler{
 
 
 	public FSCrawler(){
-		super(REQUEST_WAIT_TIME_DEFAULT, ERROR_WAIT_TIME_DEFAULT);
+		super(ERROR_WAIT_TIME_DEFAULT);
 	}
 
 	@Override

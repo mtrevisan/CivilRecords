@@ -34,7 +34,7 @@ public abstract class AbstractCrawler{
 	private static final Logger LOGGER = Logger.getLogger(AbstractCrawler.class.getName());
 
 	//[ms]
-	public static final int REQUEST_WAIT_TIME_DEFAULT = 4_500;
+	public static final int REQUEST_WAIT_TIME_DEFAULT = 6_000;
 	//[ms]
 	public static final int ERROR_WAIT_TIME_DEFAULT = 10_000;
 	//[ms]
@@ -44,7 +44,7 @@ public abstract class AbstractCrawler{
 	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
 
-	private final int requestWaitTime;
+	private int requestWaitTime;
 	private final int errorWaitTime;
 
 	private Thread thread;
@@ -57,17 +57,17 @@ public abstract class AbstractCrawler{
 	private String nextURLToDownload;
 
 
-	protected AbstractCrawler(int requestWaitTime, int errorWaitTime){
-		this.requestWaitTime = requestWaitTime;
+	protected AbstractCrawler(int errorWaitTime){
 		this.errorWaitTime = errorWaitTime;
 	}
 
-	public void startThread(String archiveURL, Long catalogNumber, String username, String password, String outputFilePath){
+	public void startThread(String archiveURL, String username, String password, int requestWaitTime, String outputFilePath){
 		if(thread != null)
 			stopThread();
 
 		this.username = username;
 		this.password = password;
+		this.requestWaitTime = requestWaitTime;
 		shutdown = false;
 
 		thread = new Thread(){

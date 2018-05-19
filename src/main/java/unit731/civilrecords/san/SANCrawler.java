@@ -26,7 +26,7 @@ public class SANCrawler extends AbstractCrawler{
 
 
 	public SANCrawler(){
-		super(0, ERROR_WAIT_TIME_DEFAULT);
+		super(ERROR_WAIT_TIME_DEFAULT);
 	}
 
 	@Override

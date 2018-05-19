@@ -38,26 +38,22 @@ public class Main{
 
 			Site site = Site.valueOf(cmd.getOptionValue("site"));
 			String archiveURL = cmd.getOptionValue("archive");
-			String catalog = cmd.getOptionValue("catalog");
 			String username = cmd.getOptionValue("username");
 			String password = cmd.getOptionValue("password");
-			if(site == Site.FS && (username == null || username.trim().length() == 0 || password == null || password.trim().length() == 0))
-				throw new ParseException("If -site is FS then the username (option -username) and password (option -password) should be provided");
-			if(site == Site.FS && !(archiveURL == null ^ catalog == null))
-				throw new ParseException("If -site is FS then either archive URL (option -archive) or catalog number (option -catalog) should be provided");
-			Long catalogNumber = null;
-			if(catalog != null){
-				try{
-					catalogNumber = Long.valueOf(catalog);
-				}
-				catch(NumberFormatException e){
-					throw new ParseException("Catalog number (option -catalog) is not a number ('" + catalog + "')");
-				}
+			int requestWaitTime = Integer.parseInt(cmd.getOptionValue("requestWaitTime", "0"));
+			if(requestWaitTime < 0)
+				requestWaitTime = 0;
+
+			if(site == Site.FS){
+				if(username == null || username.trim().length() == 0 || password == null || password.trim().length() == 0)
+					throw new ParseException("If -site is FS then the username (option -username) and password (option -password) should be provided");
+				if(archiveURL == null)
+					throw new ParseException("If -site is FS then either archive URL (option -archive) or catalog number (option -catalog) should be provided");
 			}
 
 			String outputFilePath = cmd.getOptionValue("output");
 			AbstractCrawler crawler = CRAWLERS.get(site);
-			crawler.startThread(archiveURL, catalogNumber, username, password, outputFilePath);
+			crawler.startThread(archiveURL, username, password, requestWaitTime, outputFilePath);
 
 			Runtime.getRuntime().addShutdownHook(new Thread(){
 				@Override
@@ -85,13 +81,9 @@ public class Main{
 		site.setRequired(true);
 		options.addOption(site);
 
-		Option archive = new Option("a", "archive", true, "archive URL (ex. 61903/3:1:3QSQ-G9WY-C7JD or Archivio+di+Stato+di+Treviso/Stato+civile+napoleonico/Sarmede/Matrimoni/1806/317/005058208_00001.jpg)");
+		Option archive = new Option("a", "archive", true, "archive URL (ex. 3QSQ-G9WY-C7JD or Archivio+di+Stato+di+Treviso/Stato+civile+napoleonico/Sarmede/Matrimoni/1806/317/005058208_00001.jpg)");
 		archive.setRequired(false);
 		options.addOption(archive);
-
-		Option catalog = new Option("c", "catalog", true, "catalog number (ex. 2656492)");
-		catalog.setRequired(false);
-		options.addOption(catalog);
 
 		Option username = new Option("u", "username", true, "username");
 		username.setRequired(false);
@@ -100,6 +92,10 @@ public class Main{
 		Option password = new Option("p", "password", true, "password");
 		password.setRequired(false);
 		options.addOption(password);
+
+		Option requestWaitTime = new Option("w", "requestWaitTime", true, "request wait time [ms]");
+		password.setRequired(false);
+		options.addOption(requestWaitTime);
 
 		Option output = new Option("o", "output", true, "output file (ex. C:\\Users\\mauro\\Downloads\\archive.pdf)");
 		output.setRequired(true);
