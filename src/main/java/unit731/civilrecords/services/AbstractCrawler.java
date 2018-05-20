@@ -18,8 +18,10 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -34,7 +36,7 @@ public abstract class AbstractCrawler{
 	private static final Logger LOGGER = Logger.getLogger(AbstractCrawler.class.getName());
 
 	//[ms]
-	public static final int REQUEST_WAIT_TIME_DEFAULT = 6_000;
+	public static final int REQUEST_WAIT_TIME_DEFAULT = 7_000;
 	//[ms]
 	public static final int ERROR_WAIT_TIME_DEFAULT = 10_000;
 	//[ms]
@@ -56,6 +58,8 @@ public abstract class AbstractCrawler{
 	private String startingURL;
 	private String nextURLToDownload;
 
+	private final Set<String> exceptions = new HashSet<>();
+
 
 	protected AbstractCrawler(int errorWaitTime){
 		this.errorWaitTime = errorWaitTime;
@@ -69,6 +73,7 @@ public abstract class AbstractCrawler{
 		this.password = password;
 		this.requestWaitTime = requestWaitTime;
 		shutdown = false;
+		exceptions.clear();
 
 		thread = new Thread(){
 			@Override
@@ -79,6 +84,8 @@ public abstract class AbstractCrawler{
 				}
 				catch(IOException e){
 					LOGGER.log(Level.SEVERE, null, e);
+
+					exceptions.add(e.getMessage());
 				}
 
 				if(loggedIn)
@@ -131,6 +138,8 @@ public abstract class AbstractCrawler{
 		}
 		catch(IOException | DocumentException e){
 			LOGGER.log(Level.SEVERE, null, e);
+
+			exceptions.add(e.getMessage());
 		}
 		finally{
 			document.close();
@@ -139,6 +148,9 @@ public abstract class AbstractCrawler{
 		//[s]
 		double delta = (System.currentTimeMillis() - start) / 1000.;
 		System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Done in %.1f mins", delta / 60.);
+		System.out.format(LINE_SEPARATOR + "Exception count: %d", exceptions.size());
+		exceptions.stream()
+			.forEach(e -> System.out.format(LINE_SEPARATOR + "\t%s", e));
 	}
 
 	private String readNextURLToDownload(String startingURL) throws IOException{
@@ -244,6 +256,8 @@ public abstract class AbstractCrawler{
 				break;
 			}
 			catch(HttpResponseException e){
+				exceptions.add(e.getMessage());
+
 				try{
 					login(username, password);
 				}
@@ -252,6 +266,8 @@ public abstract class AbstractCrawler{
 				}
 			}
 			catch(DocumentException | IOException | URISyntaxException e){
+				exceptions.add(e.getMessage());
+
 //				System.out.format("\n");
 //				LOGGER.log(Level.SEVERE, null, e);
 
@@ -274,6 +290,8 @@ public abstract class AbstractCrawler{
 				break;
 			}
 			catch(IOException | URISyntaxException e){
+				exceptions.add(e.getMessage());
+
 //				System.out.format("\n");
 //				LOGGER.log(Level.SEVERE, null, e);
 

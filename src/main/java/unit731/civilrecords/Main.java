@@ -62,7 +62,7 @@ public class Main{
 
 					crawler.stopThread();
 
-					System.out.println("Crawler shutdown complete");
+					System.out.println("Crawler shutdown complete" + AbstractCrawler.LINE_SEPARATOR);
 				}
 			});
 		}
