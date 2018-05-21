@@ -18,10 +18,10 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -58,7 +58,7 @@ public abstract class AbstractCrawler{
 	private String startingURL;
 	private String nextURLToDownload;
 
-	private final Set<String> exceptions = new HashSet<>();
+	private final Map<String, Integer> exceptions = new HashMap<>();
 
 
 	protected AbstractCrawler(int errorWaitTime){
@@ -85,7 +85,7 @@ public abstract class AbstractCrawler{
 				catch(IOException e){
 					LOGGER.log(Level.SEVERE, null, e);
 
-					exceptions.add(e.getMessage());
+					addException(e);
 				}
 
 				if(loggedIn)
@@ -139,7 +139,7 @@ public abstract class AbstractCrawler{
 		catch(IOException | DocumentException e){
 			LOGGER.log(Level.SEVERE, null, e);
 
-			exceptions.add(e.getMessage());
+			addException(e);
 		}
 		finally{
 			document.close();
@@ -148,9 +148,9 @@ public abstract class AbstractCrawler{
 		//[s]
 		double delta = (System.currentTimeMillis() - start) / 1000.;
 		System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Done in %.1f mins", delta / 60.);
-		System.out.format(LINE_SEPARATOR + "Exception count: %d", exceptions.size());
-		exceptions.stream()
-			.forEach(e -> System.out.format(LINE_SEPARATOR + "\t%s", e));
+		System.out.format(LINE_SEPARATOR + "Exception count: %d", exceptions.keySet().size());
+		exceptions.entrySet().stream()
+			.forEach(e -> System.out.format(LINE_SEPARATOR + "\t%s (%d)", e.getKey(), e.getValue()));
 	}
 
 	private String readNextURLToDownload(String startingURL) throws IOException{
@@ -256,7 +256,7 @@ public abstract class AbstractCrawler{
 				break;
 			}
 			catch(HttpResponseException e){
-				exceptions.add(e.getMessage());
+				addException(e);
 
 				try{
 					login(username, password);
@@ -266,7 +266,7 @@ public abstract class AbstractCrawler{
 				}
 			}
 			catch(DocumentException | IOException | URISyntaxException e){
-				exceptions.add(e.getMessage());
+				addException(e);
 
 //				System.out.format("\n");
 //				LOGGER.log(Level.SEVERE, null, e);
@@ -290,7 +290,7 @@ public abstract class AbstractCrawler{
 				break;
 			}
 			catch(IOException | URISyntaxException e){
-				exceptions.add(e.getMessage());
+				addException(e);
 
 //				System.out.format("\n");
 //				LOGGER.log(Level.SEVERE, null, e);
@@ -300,6 +300,14 @@ public abstract class AbstractCrawler{
 			}
 		}
 		return url;
+	}
+
+	private void addException(Exception e){
+		String text = e.getMessage();
+		Integer count = exceptions.get(text);
+		if(count == null)
+			count = 0;
+		exceptions.put(text, count + 1);
 	}
 
 	private byte[] getRawImage(String url) throws URISyntaxException, IOException{
