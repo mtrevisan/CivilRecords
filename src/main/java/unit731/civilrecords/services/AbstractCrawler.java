@@ -103,7 +103,9 @@ public abstract class AbstractCrawler{
 		try{
 			thread.join(INTERRUPT_WAIT_TIME);
 		}
-		catch(InterruptedException e){}
+		catch(InterruptedException e){
+			System.out.println();
+		}
 
 		writeNextURLToDownload(nextURLToDownload);
 	}
@@ -148,7 +150,7 @@ public abstract class AbstractCrawler{
 		//[s]
 		double delta = (System.currentTimeMillis() - start) / 1000.;
 		System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Done in %.1f mins", delta / 60.);
-		System.out.format(LINE_SEPARATOR + "Exception count: %d", exceptions.keySet().size());
+		System.out.print(LINE_SEPARATOR + "Exceptions");
 		exceptions.entrySet().stream()
 			.forEach(e -> System.out.format(LINE_SEPARATOR + "\t%s (%d)", e.getKey(), e.getValue()));
 	}
