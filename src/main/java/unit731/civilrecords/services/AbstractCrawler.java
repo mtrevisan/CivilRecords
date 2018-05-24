@@ -150,9 +150,11 @@ public abstract class AbstractCrawler{
 		//[s]
 		double delta = (System.currentTimeMillis() - start) / 1000.;
 		System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Done in %.1f mins", delta / 60.);
-		System.out.print(LINE_SEPARATOR + "Exceptions");
-		exceptions.entrySet().stream()
-			.forEach(e -> System.out.format(LINE_SEPARATOR + "\t%s (%d)", e.getKey(), e.getValue()));
+		if(!exceptions.isEmpty()){
+			System.out.print(LINE_SEPARATOR + "Exceptions:");
+			exceptions.entrySet().stream()
+				.forEach(e -> System.out.format(LINE_SEPARATOR + "\t%s (%d)", e.getKey(), e.getValue()));
+		}
 	}
 
 	private String readNextURLToDownload(String startingURL) throws IOException{
