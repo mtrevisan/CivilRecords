@@ -77,29 +77,30 @@ public class Main{
 	}
 
 	private static void defineOptions(Options options) throws IllegalArgumentException{
-		Option site = new Option("s", "site", true, "site type (ex. FS or SAN)");
-		site.setRequired(true);
-		options.addOption(site);
+		Option opt = new Option("s", "site", true, "site type (ex. FS or SAN)");
+		opt.setRequired(true);
+		options.addOption(opt);
 
-		Option archive = new Option("a", "archive", true, "archive URL (ex. 3QSQ-G9WY-C7JD or Archivio+di+Stato+di+Treviso/Stato+civile+napoleonico/Sarmede/Matrimoni/1806/317/005058208_00001.jpg)");
-		archive.setRequired(false);
-		options.addOption(archive);
+		opt = new Option("a", "archive", true, "archive URL (ex. 3QSQ-G9WY-C7JD or Archivio+di+Stato+di+Treviso/Stato+civile+napoleonico/Sarmede/Matrimoni/1806/317/005058208_00001.jpg)");
+		opt.setRequired(false);
+		options.addOption(opt);
 
-		Option username = new Option("u", "username", true, "username");
-		username.setRequired(false);
-		options.addOption(username);
+		opt = new Option("u", "username", true, "username");
+		opt.setRequired(false);
+		options.addOption(opt);
 
-		Option password = new Option("p", "password", true, "password");
-		password.setRequired(false);
-		options.addOption(password);
+		opt = new Option("p", "password", true, "password");
+		opt.setRequired(false);
+		options.addOption(opt);
 
-		Option requestWaitTime = new Option("w", "requestWaitTime", true, "request wait time [ms]");
-		password.setRequired(false);
-		options.addOption(requestWaitTime);
+		opt = new Option("w", "requestWaitTime", true, "request wait time [ms]");
+		opt.setRequired(false);
+		opt.setType(Number.class);
+		options.addOption(opt);
 
-		Option output = new Option("o", "output", true, "output file (ex. C:\\Users\\mauro\\Downloads\\archive.pdf)");
-		output.setRequired(true);
-		options.addOption(output);
+		opt = new Option("o", "output", true, "output file (ex. C:\\Users\\mauro\\Downloads\\archive.pdf)");
+		opt.setRequired(true);
+		options.addOption(opt);
 	}
 
 }
