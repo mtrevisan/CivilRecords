@@ -40,9 +40,6 @@ public class Main{
 			String archiveURL = cmd.getOptionValue("archive");
 			String username = cmd.getOptionValue("username");
 			String password = cmd.getOptionValue("password");
-			int requestWaitTime = Integer.parseInt(cmd.getOptionValue("requestWaitTime", "0"));
-			if(requestWaitTime < 0)
-				requestWaitTime = 0;
 
 			if(site == Site.FS){
 				if(username == null || username.trim().length() == 0 || password == null || password.trim().length() == 0)
@@ -53,7 +50,7 @@ public class Main{
 
 			String outputFilePath = cmd.getOptionValue("output");
 			AbstractCrawler crawler = CRAWLERS.get(site);
-			crawler.startThread(archiveURL, username, password, requestWaitTime, outputFilePath);
+			crawler.startThread(archiveURL, username, password, outputFilePath);
 
 			Runtime.getRuntime().addShutdownHook(new Thread(){
 				@Override
@@ -91,11 +88,6 @@ public class Main{
 
 		opt = new Option("p", "password", true, "password");
 		opt.setRequired(false);
-		options.addOption(opt);
-
-		opt = new Option("w", "requestWaitTime", true, "request wait time [ms]");
-		opt.setRequired(false);
-		opt.setType(Number.class);
 		options.addOption(opt);
 
 		opt = new Option("o", "output", true, "output file (ex. C:\\Users\\mauro\\Downloads\\archive.pdf)");

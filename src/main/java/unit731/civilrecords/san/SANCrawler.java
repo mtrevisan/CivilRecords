@@ -21,12 +21,17 @@ import unit731.civilrecords.services.HttpUtils;
 
 public class SANCrawler extends AbstractCrawler{
 
+	//[ms]
+	private static final int REQUEST_WAIT_TIME_DEFAULT = 0;
+	//[ms]
+	private static final int ERROR_WAIT_TIME_DEFAULT = 10_000;
+
 	private static final String URL_SAN = "http://www.antenati.san.beniculturali.it";
 	private static final String URL_SAN_ARCHIVE = URL_SAN + "/v/";
 
 
 	public SANCrawler(){
-		super(ERROR_WAIT_TIME_DEFAULT);
+		super(REQUEST_WAIT_TIME_DEFAULT, ERROR_WAIT_TIME_DEFAULT);
 	}
 
 	@Override

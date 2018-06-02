@@ -36,17 +36,24 @@ public abstract class AbstractCrawler{
 	private static final Logger LOGGER = Logger.getLogger(AbstractCrawler.class.getName());
 
 	//[ms]
-	public static final int REQUEST_WAIT_TIME_DEFAULT = 7_000;
-	//[ms]
-	public static final int ERROR_WAIT_TIME_DEFAULT = 10_000;
-	//[ms]
 	public static final int INTERRUPT_WAIT_TIME = 2 * 60 * 1000;
+	//[ms]
+	private static final int REQUEST_WAIT_TIME_DELTA_STARTING = 1000;
+	//[ms]
+	private static final int REQUEST_WAIT_TIME_MIN = 50;
+	private static final int REQUEST_WAIT_TIME_ADJUST_INTERVAL = 10;
+	private static final double REQUEST_WAIT_TIME_REDUCTION_FACTOR = 0.5;
 
 	private static final String CONFIG_FILE = "config.properties";
 	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
 
 	private int requestWaitTime;
+	private int requestWaitTimeDelta = REQUEST_WAIT_TIME_DELTA_STARTING;
+	private int requestWaitTimePages;
+	private int requestWaitTimeMissing;
+	private int requestWaitTimeMissingLast;
+	private Boolean requestWaitTimeMinLast;
 	private final int errorWaitTime;
 
 	private Thread thread;
@@ -61,17 +68,21 @@ public abstract class AbstractCrawler{
 	private final Map<String, Integer> exceptions = new HashMap<>();
 
 
-	protected AbstractCrawler(int errorWaitTime){
+	protected AbstractCrawler(int requestWaitTime, int errorWaitTime){
+		this.requestWaitTime = requestWaitTime;
 		this.errorWaitTime = errorWaitTime;
 	}
 
-	public void startThread(String archiveURL, String username, String password, int requestWaitTime, String outputFilePath){
+	public void startThread(String archiveURL, String username, String password, String outputFilePath){
 		if(thread != null)
 			stopThread();
 
 		this.username = username;
 		this.password = password;
-		this.requestWaitTime = requestWaitTime;
+		requestWaitTimePages = 0;
+		requestWaitTimeMissing = 0;
+		requestWaitTimeMissingLast = 0;
+		requestWaitTimeMinLast = false;
 		shutdown = false;
 		exceptions.clear();
 
@@ -131,6 +142,8 @@ public abstract class AbstractCrawler{
 
 				nextURLToDownload = extractPage(nextURLToDownload, document, writer);
 
+				adjustRequestWaitTime();
+
 				//[s]
 				double cycleDuration = (System.currentTimeMillis() - cycleStart) / 1000.;
 				stats.addValue(cycleDuration);
@@ -150,10 +163,40 @@ public abstract class AbstractCrawler{
 		//[s]
 		double delta = (System.currentTimeMillis() - start) / 1000.;
 		System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Done in %.1f mins", delta / 60.);
+		System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Request wait time %d ms, delta %d ms", requestWaitTime, requestWaitTimeDelta);
 		if(!exceptions.isEmpty()){
 			System.out.print(LINE_SEPARATOR + "Exceptions:");
 			exceptions.entrySet().stream()
 				.forEach(e -> System.out.format(LINE_SEPARATOR + "\t%s (%d)", e.getKey(), e.getValue()));
+		}
+	}
+
+	private void adjustRequestWaitTime(){
+		requestWaitTimePages ++;
+
+		if(requestWaitTimePages == REQUEST_WAIT_TIME_ADJUST_INTERVAL){
+			if(requestWaitTimeMissing <= requestWaitTimeMissingLast){
+				requestWaitTime -= requestWaitTimeDelta;
+
+				if(requestWaitTimeMinLast != null && !requestWaitTimeMinLast)
+					requestWaitTimeDelta = Math.max((int)(requestWaitTimeDelta * REQUEST_WAIT_TIME_REDUCTION_FACTOR), REQUEST_WAIT_TIME_MIN);
+				requestWaitTimeMinLast = Boolean.TRUE;
+
+//				System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Adjust request wait time to %d ms, delta %d ms" + LINE_SEPARATOR, requestWaitTime, requestWaitTimeDelta);
+			}
+			else if(requestWaitTimeMissing > requestWaitTimeMissingLast){
+				requestWaitTime += requestWaitTimeDelta;
+
+				if(requestWaitTimeMinLast != null && requestWaitTimeMinLast)
+					requestWaitTimeDelta = Math.max((int)(requestWaitTimeDelta * REQUEST_WAIT_TIME_REDUCTION_FACTOR), REQUEST_WAIT_TIME_MIN);
+				requestWaitTimeMinLast = Boolean.FALSE;
+
+//				System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Adjust request wait time to %d ms, delta %d ms" + LINE_SEPARATOR, requestWaitTime, requestWaitTimeDelta);
+			}
+
+			requestWaitTimeMissingLast = requestWaitTimeMissing;
+			requestWaitTimeMissing = 0;
+			requestWaitTimePages = 0;
 		}
 	}
 
@@ -308,6 +351,9 @@ public abstract class AbstractCrawler{
 
 	private void addException(Exception e){
 		String text = e.getMessage();
+		if("Too Many Requests".equals(text))
+			requestWaitTimeMissing ++;
+
 		Integer count = exceptions.get(text);
 		if(count == null)
 			count = 0;
