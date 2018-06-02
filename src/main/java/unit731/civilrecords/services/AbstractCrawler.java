@@ -163,7 +163,7 @@ public abstract class AbstractCrawler{
 		//[s]
 		double delta = (System.currentTimeMillis() - start) / 1000.;
 		System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Done in %.1f mins", delta / 60.);
-		System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Request wait time %d ms, delta %d ms", requestWaitTime, requestWaitTimeDelta);
+		System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Request wait time %d ms", requestWaitTime);
 		if(!exceptions.isEmpty()){
 			System.out.print(LINE_SEPARATOR + "Exceptions:");
 			exceptions.entrySet().stream()
