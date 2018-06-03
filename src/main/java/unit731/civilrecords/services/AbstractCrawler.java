@@ -50,7 +50,7 @@ public abstract class AbstractCrawler{
 
 	private int requestWaitTime;
 	private int requestWaitTimeDelta = REQUEST_WAIT_TIME_DELTA_STARTING;
-	private int requestWaitTimePages;
+	private int requestWaitTimeRequests;
 	private int requestWaitTimeMissing;
 	private int requestWaitTimeMissingLast;
 	private Boolean requestWaitTimeMinLast;
@@ -79,7 +79,7 @@ public abstract class AbstractCrawler{
 
 		this.username = username;
 		this.password = password;
-		requestWaitTimePages = 0;
+		requestWaitTimeRequests = 0;
 		requestWaitTimeMissing = 0;
 		requestWaitTimeMissingLast = 0;
 		requestWaitTimeMinLast = false;
@@ -142,8 +142,6 @@ public abstract class AbstractCrawler{
 
 				nextURLToDownload = extractPage(nextURLToDownload, document, writer);
 
-				adjustRequestWaitTime();
-
 				//[s]
 				double cycleDuration = (System.currentTimeMillis() - cycleStart) / 1000.;
 				stats.addValue(cycleDuration);
@@ -172,11 +170,11 @@ public abstract class AbstractCrawler{
 	}
 
 	private void adjustRequestWaitTime(){
-		requestWaitTimePages ++;
+		requestWaitTimeRequests ++;
 
-		if(requestWaitTimePages == REQUEST_WAIT_TIME_ADJUST_INTERVAL){
+		if(requestWaitTimeRequests == REQUEST_WAIT_TIME_ADJUST_INTERVAL){
 			if(requestWaitTimeMissing <= requestWaitTimeMissingLast){
-				requestWaitTime -= requestWaitTimeDelta;
+				requestWaitTime = Math.max(requestWaitTime - requestWaitTimeDelta, 0);
 
 				if(requestWaitTimeMinLast != null && !requestWaitTimeMinLast)
 					requestWaitTimeDelta = Math.max((int)(requestWaitTimeDelta * REQUEST_WAIT_TIME_REDUCTION_FACTOR), REQUEST_WAIT_TIME_MIN);
@@ -185,7 +183,7 @@ public abstract class AbstractCrawler{
 //				System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Adjust request wait time to %d ms, delta %d ms" + LINE_SEPARATOR, requestWaitTime, requestWaitTimeDelta);
 			}
 			else if(requestWaitTimeMissing > requestWaitTimeMissingLast){
-				requestWaitTime += requestWaitTimeDelta;
+				requestWaitTime = Math.max(requestWaitTime + requestWaitTimeDelta, 0);
 
 				if(requestWaitTimeMinLast != null && requestWaitTimeMinLast)
 					requestWaitTimeDelta = Math.max((int)(requestWaitTimeDelta * REQUEST_WAIT_TIME_REDUCTION_FACTOR), REQUEST_WAIT_TIME_MIN);
@@ -196,7 +194,7 @@ public abstract class AbstractCrawler{
 
 			requestWaitTimeMissingLast = requestWaitTimeMissing;
 			requestWaitTimeMissing = 0;
-			requestWaitTimePages = 0;
+			requestWaitTimeRequests = 0;
 		}
 	}
 
@@ -297,12 +295,16 @@ public abstract class AbstractCrawler{
 
 				addImageToDocument(raw, document, writer);
 
+				adjustRequestWaitTime();
+
 				try{ Thread.sleep(requestWaitTime); }
 				catch(InterruptedException ie){}
 
 				break;
 			}
 			catch(HttpResponseException e){
+				adjustRequestWaitTime();
+
 				addException(e);
 
 				try{
