@@ -169,35 +169,6 @@ public abstract class AbstractCrawler{
 		}
 	}
 
-	private void adjustRequestWaitTime(){
-		requestWaitTimeRequests ++;
-
-		if(requestWaitTimeRequests == REQUEST_WAIT_TIME_ADJUST_INTERVAL){
-			if(requestWaitTimeMissing <= requestWaitTimeMissingLast){
-				requestWaitTime = Math.max(requestWaitTime - requestWaitTimeDelta, 0);
-
-				if(requestWaitTimeMinLast != null && !requestWaitTimeMinLast)
-					requestWaitTimeDelta = Math.max((int)(requestWaitTimeDelta * REQUEST_WAIT_TIME_REDUCTION_FACTOR), REQUEST_WAIT_TIME_MIN);
-				requestWaitTimeMinLast = Boolean.TRUE;
-
-//				System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Adjust request wait time to %d ms, delta %d ms" + LINE_SEPARATOR, requestWaitTime, requestWaitTimeDelta);
-			}
-			else if(requestWaitTimeMissing > requestWaitTimeMissingLast){
-				requestWaitTime = Math.max(requestWaitTime + requestWaitTimeDelta, 0);
-
-				if(requestWaitTimeMinLast != null && requestWaitTimeMinLast)
-					requestWaitTimeDelta = Math.max((int)(requestWaitTimeDelta * REQUEST_WAIT_TIME_REDUCTION_FACTOR), REQUEST_WAIT_TIME_MIN);
-				requestWaitTimeMinLast = Boolean.FALSE;
-
-//				System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Adjust request wait time to %d ms, delta %d ms" + LINE_SEPARATOR, requestWaitTime, requestWaitTimeDelta);
-			}
-
-			requestWaitTimeMissingLast = requestWaitTimeMissing;
-			requestWaitTimeMissing = 0;
-			requestWaitTimeRequests = 0;
-		}
-	}
-
 	private String readNextURLToDownload(String startingURL) throws IOException{
 		try(InputStream input = new FileInputStream(CONFIG_FILE)){
 			Properties prop = new Properties();
@@ -214,7 +185,8 @@ public abstract class AbstractCrawler{
 	}
 
 	private void writeNextURLToDownload(String url){
-		System.out.format("Store next URL to download: %s" + LINE_SEPARATOR, url);
+		if(url != null)
+			System.out.format("Store next URL to download: %s" + LINE_SEPARATOR, url);
 
 		Properties prop = new Properties();
 
@@ -328,6 +300,35 @@ public abstract class AbstractCrawler{
 					catch(InterruptedException ie){}
 				}
 			}
+		}
+	}
+
+	private void adjustRequestWaitTime(){
+		requestWaitTimeRequests ++;
+
+		if(requestWaitTimeRequests == REQUEST_WAIT_TIME_ADJUST_INTERVAL){
+			if(requestWaitTimeMissing <= requestWaitTimeMissingLast){
+				requestWaitTime = Math.max(requestWaitTime - requestWaitTimeDelta, 0);
+
+				if(requestWaitTimeMinLast != null && !requestWaitTimeMinLast)
+					requestWaitTimeDelta = Math.max((int)(requestWaitTimeDelta * REQUEST_WAIT_TIME_REDUCTION_FACTOR), REQUEST_WAIT_TIME_MIN);
+				requestWaitTimeMinLast = Boolean.TRUE;
+
+//				System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Adjust request wait time to %d ms, delta %d ms" + LINE_SEPARATOR, requestWaitTime, requestWaitTimeDelta);
+			}
+			else if(requestWaitTimeMissing > requestWaitTimeMissingLast){
+				requestWaitTime = Math.max(requestWaitTime + requestWaitTimeDelta, 0);
+
+				if(requestWaitTimeMinLast != null && requestWaitTimeMinLast)
+					requestWaitTimeDelta = Math.max((int)(requestWaitTimeDelta * REQUEST_WAIT_TIME_REDUCTION_FACTOR), REQUEST_WAIT_TIME_MIN);
+				requestWaitTimeMinLast = Boolean.FALSE;
+
+//				System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Adjust request wait time to %d ms, delta %d ms" + LINE_SEPARATOR, requestWaitTime, requestWaitTimeDelta);
+			}
+
+			requestWaitTimeMissingLast = requestWaitTimeMissing;
+			requestWaitTimeMissing = 0;
+			requestWaitTimeRequests = 0;
 		}
 	}
 
