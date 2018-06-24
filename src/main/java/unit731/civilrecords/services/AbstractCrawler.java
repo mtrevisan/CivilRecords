@@ -31,23 +31,41 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.http.client.HttpResponseException;
 
 
-//tot1	= (pages / 41) * 9[sec] * 60 + (pages - pages / 41) * time_to_download[sec]
-//			= pages * (9 * 60 + 40 * time_to_download[sec]) / 41
-//tot2	= pages * (9 + time_to_download[sec])
-//if time_to_download > 9 * 19 = 171 s then tot1 < tot2
 public abstract class AbstractCrawler{
 
 	private static final Logger LOGGER = Logger.getLogger(AbstractCrawler.class.getName());
 
+	private static enum DownloadType{
+		WAIT_EACH(9_000),
+		GO_STRAIGHT(0);
+
+		//[ms]
+		private final int timeToWait;
+
+		DownloadType(int timeToWait){
+			this.timeToWait = timeToWait;
+		}
+
+		public double calculateTotalDownloadTime(int pages, double timeToDownloadSinglePage){
+			//[s]
+			int waitTimeBetweenDownloads = 9;
+			int rateLimiterMaxDonwloads = 41;
+			//[s]
+			int rateLimiterWaitTime = 9 * 60;
+			return (this == GO_STRAIGHT?
+				//floor(pages / 41) * 9[s] * 60 + (pages - floor(pages / 41)) * time_to_download[s]
+				Math.floor(pages / rateLimiterMaxDonwloads) * rateLimiterWaitTime + (pages - Math.floor(pages / rateLimiterMaxDonwloads)) * timeToDownloadSinglePage
+				//pages * (9 + time_to_download[s])
+				: pages * (waitTimeBetweenDownloads + timeToDownloadSinglePage));
+		}
+	};
+
 	//[ms]
 	public static final int INTERRUPT_WAIT_TIME = 2 * 60_000;
 
+	private DownloadType downloadType = DownloadType.WAIT_EACH;
 	//[ms]
-	private static final int PER_REQUEST_SLEEP = 9_000;
-	//[ms]
-//	private static final int PER_REQUEST_SLEEP = 1_000;
-	//[ms]
-//	private static final int REQUEST_RETRY_SLEEP = 30_000;
+	private static final int REQUEST_RETRY_SLEEP = 30_000;
 
 	private static final String CONFIG_FILE = "config.properties";
 	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -55,8 +73,8 @@ public abstract class AbstractCrawler{
 
 	private final int errorWaitTime;
 
-//	private boolean currentRequestRetry;
-//	private boolean firstRetry;
+	private boolean currentRequestRetry;
+	private boolean firstRetry;
 
 	private Thread thread;
 	private String username;
@@ -118,8 +136,13 @@ public abstract class AbstractCrawler{
 		writeNextURLToDownload(nextURLToDownload);
 	}
 
+	public abstract int getCurrentPageIndex();
+
+	public abstract int getTotalPages();
+
 	private void readDocument(String archiveURL, String outputFilePath){
 		DescriptiveStatistics stats = new DescriptiveStatistics(4);
+		DescriptiveStatistics pageStats = new DescriptiveStatistics(4);
 
 		long start = System.currentTimeMillis();
 
@@ -138,6 +161,22 @@ public abstract class AbstractCrawler{
 				long cycleStart = System.currentTimeMillis();
 
 				nextURLToDownload = extractPage(nextURLToDownload, document, writer);
+
+				int remainingPages = getTotalPages() - getCurrentPageIndex();
+				pageStats.addValue((System.currentTimeMillis() - cycleStart) / 1000.);
+				double downloadSpeed = pageStats.getMean();
+				double goStraightRemainingTime = DownloadType.GO_STRAIGHT.calculateTotalDownloadTime(remainingPages, downloadSpeed);
+				double waitEachRemainingTime = DownloadType.WAIT_EACH.calculateTotalDownloadTime(remainingPages, downloadSpeed);
+DownloadType previousDownloadType = downloadType;
+				downloadType = (goStraightRemainingTime < waitEachRemainingTime? DownloadType.GO_STRAIGHT: DownloadType.WAIT_EACH);
+				currentRequestRetry = false;
+if(previousDownloadType != downloadType)
+	System.out.format(LINE_SEPARATOR + "Change download type to %s, remaining time is %d" + LINE_SEPARATOR, downloadType, downloadType.calculateTotalDownloadTime(remainingPages, downloadSpeed));
+
+				if(downloadType.timeToWait > 0){
+					try{ Thread.sleep(downloadType.timeToWait); }
+					catch(InterruptedException ie){}
+				}
 
 				//[s]
 				double cycleDuration = (System.currentTimeMillis() - cycleStart) / 1000.;
@@ -257,6 +296,7 @@ public abstract class AbstractCrawler{
 
 	protected abstract String extractPage(String url, Document document, PdfWriter writer) throws IOException;
 
+	@SuppressWarnings("SleepWhileInLoop")
 	protected void extractImage(String url, Document document, PdfWriter writer){
 		while(!shutdown){
 			try{
@@ -264,19 +304,18 @@ public abstract class AbstractCrawler{
 
 				addImageToDocument(raw, document, writer);
 
-//				if(currentRequestRetry)
-//					System.out.print(LINE_SEPARATOR);
-//				currentRequestRetry = false;
-
-				try{ Thread.sleep(PER_REQUEST_SLEEP); }
-				catch(InterruptedException ie){}
+				if(downloadType == DownloadType.GO_STRAIGHT){
+					if(currentRequestRetry)
+						System.out.print(LINE_SEPARATOR);
+					currentRequestRetry = false;
+				}
 
 				break;
 			}
 			catch(HttpResponseException e){
 				addException(e);
 
-//				adjustRequestWaitTime();
+				adjustRequestWaitTime();
 
 				try{
 					login(username, password);
@@ -302,26 +341,27 @@ public abstract class AbstractCrawler{
 		}
 	}
 
-//	private void adjustRequestWaitTime(){
-//		if(currentRequestRetry){
-//			if(firstRetry){
-//				System.out.print(LINE_SEPARATOR);
-//
-//				firstRetry = false;
-//			}
-//			System.out.print(".");
-//
-//			try{ Thread.sleep(REQUEST_RETRY_SLEEP); }
-//			catch(InterruptedException ie){}
-//		}
-//	}
+	private void adjustRequestWaitTime(){
+		if(downloadType == DownloadType.GO_STRAIGHT && currentRequestRetry){
+			if(firstRetry){
+				System.out.print(LINE_SEPARATOR);
 
+				firstRetry = false;
+			}
+			System.out.print(".");
+
+			try{ Thread.sleep(REQUEST_RETRY_SLEEP); }
+			catch(InterruptedException ie){}
+		}
+	}
+
+	@SuppressWarnings("SleepWhileInLoop")
 	protected String extractNextURL(String url){
 		while(!shutdown || !shutdownBeforeCurrentPage){
 			try{
 				url = getNextURL(url);
 
-//				currentRequestRetry = false;
+				currentRequestRetry = false;
 
 				break;
 			}
@@ -340,10 +380,10 @@ public abstract class AbstractCrawler{
 
 	private void addException(Exception e){
 		String text = e.getMessage();
-//		if(!currentRequestRetry && "Too Many Requests".equals(text)){
-//			currentRequestRetry = true;
-//			firstRetry = true;
-//		}
+		if(!currentRequestRetry && "Too Many Requests".equals(text)){
+			currentRequestRetry = true;
+			firstRetry = true;
+		}
 
 		Integer count = exceptions.get(text);
 		if(count == null)

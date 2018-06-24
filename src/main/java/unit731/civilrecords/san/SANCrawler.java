@@ -33,6 +33,17 @@ public class SANCrawler extends AbstractCrawler{
 	}
 
 	@Override
+	public int getCurrentPageIndex(){
+		return 0;
+	}
+
+	@Override
+	public int getTotalPages(){
+		return 0;
+	}
+
+	@Override
+	@SuppressWarnings("SleepWhileInLoop")
 	protected String extractPage(String url, Document document, PdfWriter writer) throws IOException{
 		String nextURL = null;
 		while(!shutdown){

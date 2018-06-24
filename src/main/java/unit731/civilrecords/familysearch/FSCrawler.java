@@ -49,14 +49,24 @@ public class FSCrawler extends AbstractCrawler{
 
 	private List<String> urls;
 
-	private long currentPageIndex;
-	private long totalPages;
+	private int currentPageIndex;
+	private int totalPages;
 
 	private boolean loggedIn;
 
 
 	public FSCrawler(){
 		super(ERROR_WAIT_TIME_DEFAULT);
+	}
+
+	@Override
+	public int getCurrentPageIndex(){
+		return currentPageIndex;
+	}
+
+	@Override
+	public int getTotalPages(){
+		return totalPages;
 	}
 
 	@Override
@@ -139,7 +149,7 @@ public class FSCrawler extends AbstractCrawler{
 		if(currentPageIndex < 0)
 			currentPageIndex = 0;
 
-		return (currentPageIndex < totalPages - 1? urls.get((int)(currentPageIndex + 1)): null);
+		return (currentPageIndex < totalPages - 1? urls.get(currentPageIndex + 1): null);
 	}
 
 	@Override
