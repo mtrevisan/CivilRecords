@@ -39,9 +39,9 @@ public abstract class AbstractCrawler{
 	public static final int INTERRUPT_WAIT_TIME = 2 * 60 * 1000;
 
 	//[ms]
-	private static final int DEFAULT_REQUEST_SLEEP = 9_000;
+	private static final int PER_REQUEST_SLEEP = 1_000;
 	//[ms]
-	private static final int MAX_REQUEST_SLEEP = 3 * 60_000;
+	private static final int REQUEST_RETRY_SLEEP = 30_000;
 
 	public static final double TOO_MANY_REQUEST_FACTOR = 2.;
 
@@ -49,10 +49,10 @@ public abstract class AbstractCrawler{
 	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
 
-	private int requestWaitTime;
 	private final int errorWaitTime;
 
-	private int currentRequestTry;
+	private boolean currentRequestRetry;
+	private boolean firstRetry;
 
 	private Thread thread;
 	private String username;
@@ -108,7 +108,7 @@ public abstract class AbstractCrawler{
 			thread.join(INTERRUPT_WAIT_TIME);
 		}
 		catch(InterruptedException e){
-			System.out.println();
+			System.out.println(LINE_SEPARATOR);
 		}
 
 		writeNextURLToDownload(nextURLToDownload);
@@ -148,18 +148,17 @@ public abstract class AbstractCrawler{
 			addException(e);
 		}
 		finally{
-			document.newPage();
 			document.close();
 		}
 
 		//[s]
 		double delta = (System.currentTimeMillis() - start) / 1000.;
 		System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Done in %.1f mins", delta / 60.);
-		System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Request wait time %d ms", requestWaitTime);
 		if(!exceptions.isEmpty()){
 			System.out.print(LINE_SEPARATOR + "Exceptions:");
 			exceptions.entrySet().stream()
 				.forEach(e -> System.out.format(LINE_SEPARATOR + "\t%s (%d)", e.getKey(), e.getValue()));
+			System.out.print(LINE_SEPARATOR);
 		}
 	}
 
@@ -261,9 +260,11 @@ public abstract class AbstractCrawler{
 
 				addImageToDocument(raw, document, writer);
 
-				currentRequestTry = 0;
+				if(currentRequestRetry)
+					System.out.print(LINE_SEPARATOR);
+				currentRequestRetry = false;
 
-				try{ Thread.sleep(DEFAULT_REQUEST_SLEEP); }
+				try{ Thread.sleep(PER_REQUEST_SLEEP); }
 				catch(InterruptedException ie){}
 
 				break;
@@ -283,7 +284,7 @@ public abstract class AbstractCrawler{
 			catch(DocumentException | IOException | URISyntaxException e){
 				addException(e);
 
-//				System.out.format("\n");
+//				System.out.print("\n");
 //				LOGGER.log(Level.SEVERE, null, e);
 
 				if(shutdown){
@@ -298,19 +299,17 @@ public abstract class AbstractCrawler{
 	}
 
 	private void adjustRequestWaitTime(){
-		if(currentRequestTry > 0){
-			requestWaitTime = getSleepDuration(currentRequestTry, DEFAULT_REQUEST_SLEEP, MAX_REQUEST_SLEEP);
+		if(currentRequestRetry){
+			if(firstRetry){
+				System.out.print(LINE_SEPARATOR);
 
-			System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Adjust request wait time to %d ms", requestWaitTime);
+				firstRetry = false;
+			}
+			System.out.print(".");
 
-			try{ Thread.sleep(requestWaitTime); }
+			try{ Thread.sleep(REQUEST_RETRY_SLEEP); }
 			catch(InterruptedException ie){}
 		}
-	}
-
-	private int getSleepDuration(int currentTry, int minSleep, int maxSleep){
-		int currentSleep = (int)(minSleep * Math.pow(TOO_MANY_REQUEST_FACTOR, currentTry));
-		return Math.min(currentSleep, maxSleep);
 	}
 
 	protected String extractNextURL(String url){
@@ -318,14 +317,14 @@ public abstract class AbstractCrawler{
 			try{
 				url = getNextURL(url);
 
-				currentRequestTry = 0;
+				currentRequestRetry = false;
 
 				break;
 			}
 			catch(IOException | URISyntaxException e){
 				addException(e);
 
-//				System.out.format("\n");
+//				System.out.print("\n");
 //				LOGGER.log(Level.SEVERE, null, e);
 
 				try{ Thread.sleep(errorWaitTime); }
@@ -337,8 +336,10 @@ public abstract class AbstractCrawler{
 
 	private void addException(Exception e){
 		String text = e.getMessage();
-		if("Too Many Requests".equals(text))
-			currentRequestTry ++;
+		if(!currentRequestRetry && "Too Many Requests".equals(text)){
+			currentRequestRetry = true;
+			firstRetry = true;
+		}
 
 		Integer count = exceptions.get(text);
 		if(count == null)

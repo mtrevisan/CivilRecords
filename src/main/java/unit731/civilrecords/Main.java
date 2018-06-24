@@ -55,7 +55,7 @@ public class Main{
 			Runtime.getRuntime().addShutdownHook(new Thread(){
 				@Override
 				public void run(){
-					System.out.println(AbstractCrawler.LINE_SEPARATOR + AbstractCrawler.LINE_SEPARATOR + "Crawler shutting down...");
+					System.out.println(AbstractCrawler.LINE_SEPARATOR + "Crawler shutting down...");
 
 					crawler.stopThread();
 
