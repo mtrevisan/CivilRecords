@@ -26,7 +26,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>3.0.1</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -46,7 +46,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>3.1.1</version>
 				<executions>
 					<!-- Run shade goal on package phase -->
 					<execution>
@@ -120,10 +120,10 @@
 		<com.itextpdf.version>5.5.13</com.itextpdf.version>
 
 		<!-- Jackson -->
-		<com.fasterxml.jackson.version>2.9.4</com.fasterxml.jackson.version>
+		<com.fasterxml.jackson.version>2.9.6</com.fasterxml.jackson.version>
 
 		<!-- Jsoup -->
-		<org.jsoup.version>1.11.2</org.jsoup.version>
+		<org.jsoup.version>1.11.3</org.jsoup.version>
 
 		<!-- Logging -->
 		<!--<ch.qos.logback.version>1.2.3</ch.qos.logback.version>-->

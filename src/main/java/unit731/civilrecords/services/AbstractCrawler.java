@@ -148,6 +148,7 @@ public abstract class AbstractCrawler{
 			addException(e);
 		}
 		finally{
+			document.newPage();
 			document.close();
 		}
 
