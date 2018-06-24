@@ -36,14 +36,12 @@ public abstract class AbstractCrawler{
 	private static final Logger LOGGER = Logger.getLogger(AbstractCrawler.class.getName());
 
 	//[ms]
-	public static final int INTERRUPT_WAIT_TIME = 2 * 60 * 1000;
+	public static final int INTERRUPT_WAIT_TIME = 2 * 60_000;
 
 	//[ms]
 	private static final int PER_REQUEST_SLEEP = 1_000;
 	//[ms]
 	private static final int REQUEST_RETRY_SLEEP = 30_000;
-
-	public static final double TOO_MANY_REQUEST_FACTOR = 2.;
 
 	private static final String CONFIG_FILE = "config.properties";
 	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
