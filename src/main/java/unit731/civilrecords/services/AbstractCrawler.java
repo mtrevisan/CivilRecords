@@ -31,6 +31,10 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.http.client.HttpResponseException;
 
 
+//tot1	= (pages / 41) * 9[sec] * 60 + (pages - pages / 41) * time_to_download[sec]
+//			= pages * (9 * 60 + 40 * time_to_download[sec]) / 41
+//tot2	= pages * (9 + time_to_download[sec])
+//if time_to_download > 9 * 19 = 171 s then tot1 < tot2
 public abstract class AbstractCrawler{
 
 	private static final Logger LOGGER = Logger.getLogger(AbstractCrawler.class.getName());
@@ -39,9 +43,11 @@ public abstract class AbstractCrawler{
 	public static final int INTERRUPT_WAIT_TIME = 2 * 60_000;
 
 	//[ms]
-	private static final int PER_REQUEST_SLEEP = 1_000;
+	private static final int PER_REQUEST_SLEEP = 9_000;
 	//[ms]
-	private static final int REQUEST_RETRY_SLEEP = 30_000;
+//	private static final int PER_REQUEST_SLEEP = 1_000;
+	//[ms]
+//	private static final int REQUEST_RETRY_SLEEP = 30_000;
 
 	private static final String CONFIG_FILE = "config.properties";
 	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -49,8 +55,8 @@ public abstract class AbstractCrawler{
 
 	private final int errorWaitTime;
 
-	private boolean currentRequestRetry;
-	private boolean firstRetry;
+//	private boolean currentRequestRetry;
+//	private boolean firstRetry;
 
 	private Thread thread;
 	private String username;
@@ -258,9 +264,9 @@ public abstract class AbstractCrawler{
 
 				addImageToDocument(raw, document, writer);
 
-				if(currentRequestRetry)
-					System.out.print(LINE_SEPARATOR);
-				currentRequestRetry = false;
+//				if(currentRequestRetry)
+//					System.out.print(LINE_SEPARATOR);
+//				currentRequestRetry = false;
 
 				try{ Thread.sleep(PER_REQUEST_SLEEP); }
 				catch(InterruptedException ie){}
@@ -270,7 +276,7 @@ public abstract class AbstractCrawler{
 			catch(HttpResponseException e){
 				addException(e);
 
-				adjustRequestWaitTime();
+//				adjustRequestWaitTime();
 
 				try{
 					login(username, password);
@@ -296,26 +302,26 @@ public abstract class AbstractCrawler{
 		}
 	}
 
-	private void adjustRequestWaitTime(){
-		if(currentRequestRetry){
-			if(firstRetry){
-				System.out.print(LINE_SEPARATOR);
-
-				firstRetry = false;
-			}
-			System.out.print(".");
-
-			try{ Thread.sleep(REQUEST_RETRY_SLEEP); }
-			catch(InterruptedException ie){}
-		}
-	}
+//	private void adjustRequestWaitTime(){
+//		if(currentRequestRetry){
+//			if(firstRetry){
+//				System.out.print(LINE_SEPARATOR);
+//
+//				firstRetry = false;
+//			}
+//			System.out.print(".");
+//
+//			try{ Thread.sleep(REQUEST_RETRY_SLEEP); }
+//			catch(InterruptedException ie){}
+//		}
+//	}
 
 	protected String extractNextURL(String url){
 		while(!shutdown || !shutdownBeforeCurrentPage){
 			try{
 				url = getNextURL(url);
 
-				currentRequestRetry = false;
+//				currentRequestRetry = false;
 
 				break;
 			}
@@ -334,10 +340,10 @@ public abstract class AbstractCrawler{
 
 	private void addException(Exception e){
 		String text = e.getMessage();
-		if(!currentRequestRetry && "Too Many Requests".equals(text)){
-			currentRequestRetry = true;
-			firstRetry = true;
-		}
+//		if(!currentRequestRetry && "Too Many Requests".equals(text)){
+//			currentRequestRetry = true;
+//			firstRetry = true;
+//		}
 
 		Integer count = exceptions.get(text);
 		if(count == null)

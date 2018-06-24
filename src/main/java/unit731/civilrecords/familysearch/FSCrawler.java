@@ -30,7 +30,7 @@ import unit731.civilrecords.services.HttpUtils;
 public class FSCrawler extends AbstractCrawler{
 
 	//[ms]
-	private static final int ERROR_WAIT_TIME_DEFAULT = 10_000;
+	private static final int ERROR_WAIT_TIME_DEFAULT = 2_000;
 
 	private static final String URL_FAMILYSEARCH = "https://www.familysearch.org";
 	private static final String URL_FAMILYSEARCH_ARCHIVE = URL_FAMILYSEARCH + "/ark:/61903/3:1:";
