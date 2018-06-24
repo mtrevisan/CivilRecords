@@ -140,6 +140,7 @@ public abstract class AbstractCrawler{
 
 	public abstract int getTotalPages();
 
+	@SuppressWarnings("SleepWhileInLoop")
 	private void readDocument(String archiveURL, String outputFilePath){
 		DescriptiveStatistics stats = new DescriptiveStatistics(4);
 		DescriptiveStatistics pageStats = new DescriptiveStatistics(4);
@@ -162,16 +163,17 @@ public abstract class AbstractCrawler{
 
 				nextURLToDownload = extractPage(nextURLToDownload, document, writer);
 
-				int remainingPages = getTotalPages() - getCurrentPageIndex();
 				pageStats.addValue((System.currentTimeMillis() - cycleStart) / 1000.);
+
+				int remainingPages = getTotalPages() - getCurrentPageIndex();
 				double downloadSpeed = pageStats.getMean();
 				double goStraightRemainingTime = DownloadType.GO_STRAIGHT.calculateTotalDownloadTime(remainingPages, downloadSpeed);
 				double waitEachRemainingTime = DownloadType.WAIT_EACH.calculateTotalDownloadTime(remainingPages, downloadSpeed);
-DownloadType previousDownloadType = downloadType;
+//				DownloadType previousDownloadType = downloadType;
 				downloadType = (goStraightRemainingTime < waitEachRemainingTime? DownloadType.GO_STRAIGHT: DownloadType.WAIT_EACH);
 				currentRequestRetry = false;
-if(previousDownloadType != downloadType)
-	System.out.format(LINE_SEPARATOR + "Change download type to %s, remaining time is %d" + LINE_SEPARATOR, downloadType, downloadType.calculateTotalDownloadTime(remainingPages, downloadSpeed));
+//				if(previousDownloadType != downloadType)
+//					System.out.format(LINE_SEPARATOR + "Change download type to %s, remaining time is %.1f s" + LINE_SEPARATOR, downloadType, downloadType.calculateTotalDownloadTime(remainingPages, downloadSpeed));
 
 				if(downloadType.timeToWait > 0){
 					try{ Thread.sleep(downloadType.timeToWait); }
@@ -343,12 +345,8 @@ if(previousDownloadType != downloadType)
 
 	private void adjustRequestWaitTime(){
 		if(downloadType == DownloadType.GO_STRAIGHT && currentRequestRetry){
-			if(firstRetry){
-				System.out.print(LINE_SEPARATOR);
-
+			if(firstRetry)
 				firstRetry = false;
-			}
-			System.out.print(".");
 
 			try{ Thread.sleep(REQUEST_RETRY_SLEEP); }
 			catch(InterruptedException ie){}
