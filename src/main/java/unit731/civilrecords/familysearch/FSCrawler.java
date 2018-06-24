@@ -30,8 +30,6 @@ import unit731.civilrecords.services.HttpUtils;
 public class FSCrawler extends AbstractCrawler{
 
 	//[ms]
-	private static final int REQUEST_WAIT_TIME_DEFAULT = 9_000;
-	//[ms]
 	private static final int ERROR_WAIT_TIME_DEFAULT = 10_000;
 
 	private static final String URL_FAMILYSEARCH = "https://www.familysearch.org";
@@ -58,7 +56,7 @@ public class FSCrawler extends AbstractCrawler{
 
 
 	public FSCrawler(){
-		super(REQUEST_WAIT_TIME_DEFAULT, ERROR_WAIT_TIME_DEFAULT);
+		super(ERROR_WAIT_TIME_DEFAULT);
 	}
 
 	@Override

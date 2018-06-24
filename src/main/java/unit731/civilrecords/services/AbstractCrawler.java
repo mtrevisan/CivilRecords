@@ -37,24 +37,22 @@ public abstract class AbstractCrawler{
 
 	//[ms]
 	public static final int INTERRUPT_WAIT_TIME = 2 * 60 * 1000;
+
 	//[ms]
-	private static final int REQUEST_WAIT_TIME_DELTA_STARTING = 1000;
+	private static final int DEFAULT_REQUEST_SLEEP = 9_000;
 	//[ms]
-	private static final int REQUEST_WAIT_TIME_MIN = 50;
-	private static final int REQUEST_WAIT_TIME_ADJUST_INTERVAL = 10;
-	private static final double REQUEST_WAIT_TIME_REDUCTION_FACTOR = 0.5;
+	private static final int MAX_REQUEST_SLEEP = 3 * 60_000;
+
+	public static final double TOO_MANY_REQUEST_FACTOR = 2.;
 
 	private static final String CONFIG_FILE = "config.properties";
 	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
 
 	private int requestWaitTime;
-	private int requestWaitTimeDelta = REQUEST_WAIT_TIME_DELTA_STARTING;
-	private int requestWaitTimeRequests;
-	private int requestWaitTimeMissing;
-	private int requestWaitTimeMissingLast;
-	private Boolean requestWaitTimeMinLast;
 	private final int errorWaitTime;
+
+	private int currentRequestTry;
 
 	private Thread thread;
 	private String username;
@@ -68,8 +66,7 @@ public abstract class AbstractCrawler{
 	private final Map<String, Integer> exceptions = new HashMap<>();
 
 
-	protected AbstractCrawler(int requestWaitTime, int errorWaitTime){
-		this.requestWaitTime = requestWaitTime;
+	protected AbstractCrawler(int errorWaitTime){
 		this.errorWaitTime = errorWaitTime;
 	}
 
@@ -79,10 +76,6 @@ public abstract class AbstractCrawler{
 
 		this.username = username;
 		this.password = password;
-		requestWaitTimeRequests = 0;
-		requestWaitTimeMissing = 0;
-		requestWaitTimeMissingLast = 0;
-		requestWaitTimeMinLast = false;
 		shutdown = false;
 		exceptions.clear();
 
@@ -267,17 +260,17 @@ public abstract class AbstractCrawler{
 
 				addImageToDocument(raw, document, writer);
 
-				adjustRequestWaitTime();
+				currentRequestTry = 0;
 
-				try{ Thread.sleep(requestWaitTime); }
+				try{ Thread.sleep(DEFAULT_REQUEST_SLEEP); }
 				catch(InterruptedException ie){}
 
 				break;
 			}
 			catch(HttpResponseException e){
-				adjustRequestWaitTime();
-
 				addException(e);
+
+				adjustRequestWaitTime();
 
 				try{
 					login(username, password);
@@ -304,38 +297,27 @@ public abstract class AbstractCrawler{
 	}
 
 	private void adjustRequestWaitTime(){
-		requestWaitTimeRequests ++;
+		if(currentRequestTry > 0){
+			requestWaitTime = getSleepDuration(currentRequestTry, DEFAULT_REQUEST_SLEEP, MAX_REQUEST_SLEEP);
 
-		if(requestWaitTimeRequests == REQUEST_WAIT_TIME_ADJUST_INTERVAL){
-			if(requestWaitTimeMissing <= requestWaitTimeMissingLast){
-				requestWaitTime = Math.max(requestWaitTime - requestWaitTimeDelta, 0);
+			System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Adjust request wait time to %d ms", requestWaitTime);
 
-				if(requestWaitTimeMinLast != null && !requestWaitTimeMinLast)
-					requestWaitTimeDelta = Math.max((int)(requestWaitTimeDelta * REQUEST_WAIT_TIME_REDUCTION_FACTOR), REQUEST_WAIT_TIME_MIN);
-				requestWaitTimeMinLast = Boolean.TRUE;
-
-//				System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Adjust request wait time to %d ms, delta %d ms" + LINE_SEPARATOR, requestWaitTime, requestWaitTimeDelta);
-			}
-			else if(requestWaitTimeMissing > requestWaitTimeMissingLast){
-				requestWaitTime = Math.max(requestWaitTime + requestWaitTimeDelta, 0);
-
-				if(requestWaitTimeMinLast != null && requestWaitTimeMinLast)
-					requestWaitTimeDelta = Math.max((int)(requestWaitTimeDelta * REQUEST_WAIT_TIME_REDUCTION_FACTOR), REQUEST_WAIT_TIME_MIN);
-				requestWaitTimeMinLast = Boolean.FALSE;
-
-//				System.out.format(Locale.ENGLISH, LINE_SEPARATOR + "Adjust request wait time to %d ms, delta %d ms" + LINE_SEPARATOR, requestWaitTime, requestWaitTimeDelta);
-			}
-
-			requestWaitTimeMissingLast = requestWaitTimeMissing;
-			requestWaitTimeMissing = 0;
-			requestWaitTimeRequests = 0;
+			try{ Thread.sleep(requestWaitTime); }
+			catch(InterruptedException ie){}
 		}
+	}
+
+	private int getSleepDuration(int currentTry, int minSleep, int maxSleep){
+		int currentSleep = (int)(minSleep * Math.pow(TOO_MANY_REQUEST_FACTOR, currentTry));
+		return Math.min(currentSleep, maxSleep);
 	}
 
 	protected String extractNextURL(String url){
 		while(!shutdown || !shutdownBeforeCurrentPage){
 			try{
 				url = getNextURL(url);
+
+				currentRequestTry = 0;
 
 				break;
 			}
@@ -355,7 +337,7 @@ public abstract class AbstractCrawler{
 	private void addException(Exception e){
 		String text = e.getMessage();
 		if("Too Many Requests".equals(text))
-			requestWaitTimeMissing ++;
+			currentRequestTry ++;
 
 		Integer count = exceptions.get(text);
 		if(count == null)
