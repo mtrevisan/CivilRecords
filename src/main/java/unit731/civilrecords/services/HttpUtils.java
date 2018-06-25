@@ -2,10 +2,13 @@ package unit731.civilrecords.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import org.apache.commons.io.FileUtils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -78,6 +81,26 @@ public class HttpUtils{
 			throw e;
 		}
 	}
+
+	public static File getRequestAsFile(String url, File destinationFile) throws IOException{
+		try{
+			ResponseHandler<File> fileContentHandler = (HttpResponse response) -> {
+				InputStream source = response.getEntity().getContent();
+				FileUtils.copyInputStreamToFile(source, destinationFile);
+				return destinationFile;
+			};
+
+			Executor exec = Executor.newInstance(CLIENT);
+			return exec.execute(Request.Get(url)
+				.connectTimeout(CONNECT_TIMEOUT)
+				.socketTimeout(SOCKET_TIMEOUT))
+				.handleResponse(fileContentHandler);
+		}
+		catch(IOException e){
+			throw e;
+		}
+	}
+
 
 	public static Content postWithBodyAsRawRequestAsContent(String url, String body) throws IOException{
 		try{
