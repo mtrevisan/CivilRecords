@@ -317,7 +317,7 @@ public abstract class AbstractCrawler{
 			catch(HttpResponseException e){
 				addException(e);
 
-				adjustRequestWaitTime();
+				waitForRequest();
 
 				try{
 					login(username, password);
@@ -343,10 +343,14 @@ public abstract class AbstractCrawler{
 		}
 	}
 
-	private void adjustRequestWaitTime(){
+	private void waitForRequest(){
 		if(downloadType == DownloadType.GO_STRAIGHT && currentRequestRetry){
-			if(firstRetry)
+			if(firstRetry){
+				System.out.print(LINE_SEPARATOR);
+
 				firstRetry = false;
+			}
+			System.out.print(".");
 
 			try{ Thread.sleep(REQUEST_RETRY_SLEEP); }
 			catch(InterruptedException ie){}
