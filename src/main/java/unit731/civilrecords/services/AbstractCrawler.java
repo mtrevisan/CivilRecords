@@ -54,7 +54,7 @@ public abstract class AbstractCrawler{
 			int rateLimiterWaitTime = 9 * 60;
 			return (this == GO_STRAIGHT?
 				//floor(pages / 41) * 9[s] * 60 + (pages - floor(pages / 41)) * time_to_download[s]
-				Math.floor(pages / rateLimiterMaxDonwloads) * rateLimiterWaitTime + (pages - Math.floor(pages / rateLimiterMaxDonwloads)) * timeToDownloadSinglePage
+				Math.floor((float)pages / rateLimiterMaxDonwloads) * rateLimiterWaitTime + (pages - Math.floor((float)pages / rateLimiterMaxDonwloads)) * timeToDownloadSinglePage
 				//pages * (9 + time_to_download[s])
 				: pages * (waitTimeBetweenDownloads + timeToDownloadSinglePage));
 		}
