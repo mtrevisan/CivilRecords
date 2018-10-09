@@ -79,7 +79,7 @@ public class SANCrawler extends AbstractCrawler{
 
 	@Override
 	protected void logPageStats(DescriptiveStatistics stats){
-		System.out.format(Locale.ENGLISH, "Page downloaded and added to PDF (%3.1f s/page)   \r", stats.getMean());
+		System.out.format(Locale.ENGLISH, "Page downloaded and added to PDF (%3.1f s/page)    \r", stats.getMean());
 	}
 
 }

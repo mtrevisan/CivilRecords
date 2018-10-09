@@ -161,11 +161,11 @@ public class FSCrawler extends AbstractCrawler{
 			double speed = stats.getMean();
 			//[min]
 			int estimatedTimeToComplete = (int)Math.ceil((totalPages - currentPageIndex) * speed / 60.);
-			System.out.format(Locale.ENGLISH, "Page %s/%s (%2d%%) downloaded and added to PDF (%3.1f s/page, ETA %02d:%02d)                  \r",
+			System.out.format(Locale.ENGLISH, "Page %s/%s (%2d%%) downloaded and added to PDF (%3.1f s/page, ETA %02d:%02d)                   \r",
 				currPage, (totalPages > 0? totalPages: "?"), percPages, speed, estimatedTimeToComplete / 60, estimatedTimeToComplete % 60);
 		}
 		else
-			System.out.format(Locale.ENGLISH, "%s pages downloaded and added to PDF                                                          \r",
+			System.out.format(Locale.ENGLISH, "%s pages downloaded and added to PDF                                                           \r",
 				currPage, (totalPages > 0? totalPages: "?"), percPages);
 	}
 
