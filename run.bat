@@ -3,7 +3,6 @@
 rem to search
 rem !nascita carlotta favarato 7 May 1881 casier?
 rem morte antonio cancian apr 25 1878 fontanelle
-rem nascita carlotta roschio/maschio 1879? biancade di roncade
 rem to search (unknown registry)
 rem birth gallinaro girolamo antonio 1873 #777
 rem birth gallinaro maria luigia 1876 #22
@@ -18,9 +17,6 @@ rem Silvestro Antonello, Angela Gonzato
 rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33S7-81WJ-4Q7 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Oderzo Nati 1908.pdf"
 
 rem Luigi Trevisan + Maria di Dio (Breda? Santa Maria del rovere? after 14 jul 1900)
-
-rem Rodolfo Giacomini
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33SQ-G1GP-9QPB -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Roncade Nati 1879.pdf"
 
 
 rem examples
@@ -54,68 +50,40 @@ rem nato canada emigrato 71 a sarmede
 
 
 rem examples
-rem java -jar dist/CivilRecords.jar -s SAN -a Archivio+di+Stato+di+Treviso/Stato+civile+napoleonico/Mogliano/Nati/1811/null/005009556_00176.jpg.html -o "C:\Users\mauro\Downloads\Mogliano Nati 1811.pdf"
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3QS7-L9ML-LD23 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Fregona Nati 1887.pdf"
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33SQ-G5ZF-WN3 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Treviso Nati 1913.pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s SAN -a Archivio+di+Stato+di+Treviso/Stato+civile+napoleonico/Mogliano/Nati/1811/null/005009556_00176.jpg.html -o "C:\Users\mauro\Downloads\Mogliano Nati 1811.pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a 61903/3:1:3QS7-L9ML-LD23 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Fregona Nati 1887.pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a 61903/3:1:33SQ-G5ZF-WN3 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Treviso Nati 1913.pdf"
 
-rem Giuditta Morassutti
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CS7X-Y4PY-8 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Gruaro birth 1909-1916, 1920, 1912, 1920-1929.pdf"
 
-rem Mantelli
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3QSQ-G9WB-84M7 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Cardinale birth 1866-1907.pdf"
+rem 1916: lina 555 I, valentino 486 II, lilliana 4a II
 
-rem Giacomini, dall'Acqua, Maschio
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33S7-L1G5-S6W -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Roncade Nati 1873.pdf"
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33S7-L1YJ-943R -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Roncade Nati 1872.pdf"
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33S7-91G5-T7 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Roncade Nati 1880, 1882.pdf"
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:33S7-91G5-DF -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Roncade Nati 1881.pdf"
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CS7X-Y4PY-8 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Gruaro birth 1909-1916, 1920, 1912, 1920-1929.pdf"
-
-rem java -jar dist/CivilRecords.jar -s FS -a 61903/3:1:3Q9M-CS2Q-2L9S -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Santos Batismos, matrimonios e obitos 1906-1961.pdf"
-
-rem Del Maschio @ Rio Preto 1896 https://www.familysearch.org/search/catalog/results?count=75&placeId=872783&query=%2Bplace%3A%22Brazil%2C%20S%C3%A3o%20Paulo%2C%20S%C3%A3o%20Jos%C3%A9%20do%20Rio%20Preto%22&subjectsOpen=553125-50,399123-50
-rem Guaporé, Rio Grande do Sul https://www.familysearch.org/search/catalog/results?count=75&placeId=210836&query=%2Bplace%3A%22Brazil%2C%20Rio%20Grande%20do%20Sul%2C%20Guapor%C3%A9%22
-rem Guaporé, Paraná https://www.familysearch.org/search/catalog/results?count=75&placeId=211638&query=%2Bplace%3A%22Brazil%2C%20S%C3%A3o%20Paulo%2C%20Mar%C3%ADlia%22
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a 3Q9M-CSKD-D3DY-6 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth 194105-194406.pdf"
-java -jar dist/CivilRecords-2.2.0.jar -s FS -a 3Q9M-CSFX-Z52D -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth 194405-194504.pdf"
-java -jar dist/CivilRecords-2.2.0.jar -s FS -a 3Q9M-CSVY-M3B2-2 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth 194505-194604.pdf"
-java -jar dist/CivilRecords-2.2.0.jar -s FS -a 3Q9M-CSV8-H9YC-2 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth 195205-195305.pdf"
-java -jar dist/CivilRecords-2.2.0.jar -s FS -a 3Q9M-CSJ9-3PSB -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia death 195305-195404.pdf"
-java -jar dist/CivilRecords-2.2.0.jar -s FS -a 3Q9M-CSDQ-1927-9 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia death 195305-195901.pdf"
-java -jar dist/CivilRecords-2.2.0.jar -s FS -a 3Q9M-CSD3-F9T3-Z -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth 195305-195403.pdf"
-java -jar dist/CivilRecords-2.2.0.jar -s FS -a 3Q9M-CSVZ-19XZ-3 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia marriage 195505-195704.pdf"
-java -jar dist/CivilRecords-2.2.0.jar -s FS -a 3Q9M-CSVS-KS6W-6 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia marriage 195605-195701.pdf"
-java -jar dist/CivilRecords-2.2.0.jar -s FS -a 3Q9M-CSVZ-1S8V-G -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia marriage 195705-196205.pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
-rem java -jar dist/CivilRecords-2.2.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Marilia birth .pdf"
+rem Zanette*Dizionario del dialetto di Vittorio*.pdf
+rem 1948
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a 3Q9M-CSGG-Y4YV-9 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Araraquara death 197104-197106.pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a 3Q9M-CSFH-LSZZ-7 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa death 194801-194905.pdf"
+java -jar dist/CivilRecords-2.3.0.jar -s FS -a 3Q9M-CSH2-CX5N -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Quintana birth 194011-194102.pdf"
+java -jar dist/CivilRecords-2.3.0.jar -s FS -a 3Q9M-CS6C-5W12 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Quintana birth 194005-194008.pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Quintana birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Quintana birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Quintana birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Quintana birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
