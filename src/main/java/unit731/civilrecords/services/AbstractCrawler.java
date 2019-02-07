@@ -36,7 +36,7 @@ public abstract class AbstractCrawler{
 	private static final Logger LOGGER = Logger.getLogger(AbstractCrawler.class.getName());
 
 	private static enum DownloadType{
-		WAIT_EACH(9_000),
+		WAIT_EACH(10_000),
 		GO_STRAIGHT(0);
 
 		//[ms]
@@ -48,10 +48,10 @@ public abstract class AbstractCrawler{
 
 		public double calculateTotalDownloadTime(int pages, double timeToDownloadSinglePage){
 			//[s]
-			int waitTimeBetweenDownloads = 9;
+			int waitTimeBetweenDownloads = DownloadType.WAIT_EACH.timeToWait / 1000;
 			int rateLimiterMaxDonwloads = 41;
 			//[s]
-			int rateLimiterWaitTime = 9 * 60;
+			int rateLimiterWaitTime = DownloadType.WAIT_EACH.timeToWait * 60 / 1000;
 			return (this == GO_STRAIGHT?
 				//floor(pages / 41) * 9[s] * 60 + (pages - floor(pages / 41)) * time_to_download[s]
 				Math.floor((float)pages / rateLimiterMaxDonwloads) * rateLimiterWaitTime + (pages - Math.floor((float)pages / rateLimiterMaxDonwloads)) * timeToDownloadSinglePage
@@ -315,6 +315,8 @@ public abstract class AbstractCrawler{
 				break;
 			}
 			catch(HttpResponseException e){
+//				LOGGER.log(Level.WARNING, e.getMessage());
+
 				addException(e);
 
 				waitForRequest();
@@ -343,20 +345,6 @@ public abstract class AbstractCrawler{
 		}
 	}
 
-	private void waitForRequest(){
-		if(downloadType == DownloadType.GO_STRAIGHT && currentRequestRetry){
-			if(firstRetry){
-				System.out.print(LINE_SEPARATOR);
-
-				firstRetry = false;
-			}
-			System.out.print(".");
-
-			try{ Thread.sleep(REQUEST_RETRY_SLEEP); }
-			catch(InterruptedException ie){}
-		}
-	}
-
 	@SuppressWarnings("SleepWhileInLoop")
 	protected String extractNextURL(String url){
 		while(!shutdown || !shutdownBeforeCurrentPage){
@@ -366,6 +354,13 @@ public abstract class AbstractCrawler{
 				currentRequestRetry = false;
 
 				break;
+			}
+			catch(HttpResponseException e){
+//				LOGGER.log(Level.WARNING, e.getMessage(), e);
+
+				addException(e);
+
+				waitForRequest();
 			}
 			catch(IOException | URISyntaxException e){
 				addException(e);
@@ -382,7 +377,7 @@ public abstract class AbstractCrawler{
 
 	private void addException(Exception e){
 		String text = e.getMessage();
-		if(!currentRequestRetry && "Too Many Requests".equals(text)){
+		if(!currentRequestRetry && ("Too Many Requests".equals(text) || "Bandwidth Limit Exceeded".equals(text))){
 			currentRequestRetry = true;
 			firstRetry = true;
 		}
@@ -391,6 +386,20 @@ public abstract class AbstractCrawler{
 		if(count == null)
 			count = 0;
 		exceptions.put(text, count + 1);
+	}
+
+	private void waitForRequest(){
+		if(currentRequestRetry){
+			if(firstRetry){
+				System.out.print(LINE_SEPARATOR);
+
+				firstRetry = false;
+			}
+			System.out.print(".");
+
+			try{ Thread.sleep(REQUEST_RETRY_SLEEP); }
+			catch(InterruptedException ie){}
+		}
 	}
 
 	private byte[] getRawImage(String url) throws URISyntaxException, IOException{
