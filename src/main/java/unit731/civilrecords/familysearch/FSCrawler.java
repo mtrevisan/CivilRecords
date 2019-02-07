@@ -33,7 +33,8 @@ public class FSCrawler extends AbstractCrawler{
 	private static final int ERROR_WAIT_TIME_DEFAULT = 2_000;
 
 	private static final String URL_FAMILYSEARCH = "https://www.familysearch.org";
-	private static final String URL_FAMILYSEARCH_ARCHIVE = URL_FAMILYSEARCH + "/search/image/download?uri=" + URL_FAMILYSEARCH + "/das/v2/3:1:";
+	private static final String URL_FAMILYSEARCH_ARCHIVE = URL_FAMILYSEARCH + "/ark:/61903/3:1:";
+	private static final String URL_FAMILYSEARCH_IMAGE = URL_FAMILYSEARCH + "/search/image/download?uri=" + URL_FAMILYSEARCH + "/das/v2/3:1:";
 //	private static final String URL_FAMILYSEARCH_CATALOG = URL_FAMILYSEARCH + "/search/catalog/";
 	private static final String URL_FAMILYSEARCH_DATA = URL_FAMILYSEARCH + "/search/filmdatainfo";
 	private static final String URL_FAMILYSEARCH_PRE_LOGIN = URL_FAMILYSEARCH + "/auth/familysearch/login?ldsauth=false";
@@ -102,12 +103,9 @@ public class FSCrawler extends AbstractCrawler{
 
 	@Override
 	protected String extractPage(String url, Document document, PdfWriter writer) throws IOException{
-		//URL_FAMILYSEARCH_CATALOG
-//		url = URL_FAMILYSEARCH_ARCHIVE + url;
+		extractImage(URL_FAMILYSEARCH_IMAGE + url, document, writer);
 
-		extractImage(URL_FAMILYSEARCH_ARCHIVE + url, document, writer);
-
-		return extractNextURL(URL_FAMILYSEARCH + "/das/v2/3:1:" + url);
+		return extractNextURL(URL_FAMILYSEARCH_ARCHIVE + url);
 	}
 
 	@Override
