@@ -60,6 +60,10 @@ public abstract class AbstractCrawler{
 		}
 	};
 
+	private static final String ERROR_TOO_MANY_REQUESTS = "Too Many Requests";
+
+	private static final int HTTP_STATUS_CODE_BANDWIDTH_LIMIT_EXCEEDED = 509;
+
 	//[ms]
 	public static final int INTERRUPT_WAIT_TIME = 2 * 60_000;
 
@@ -140,6 +144,8 @@ public abstract class AbstractCrawler{
 
 	public abstract int getTotalPages();
 
+	public abstract int getPagesAdded();
+
 	@SuppressWarnings("SleepWhileInLoop")
 	private void readDocument(String archiveURL, String outputFilePath){
 		DescriptiveStatistics stats = new DescriptiveStatistics(4);
@@ -187,13 +193,17 @@ public abstract class AbstractCrawler{
 				logPageStats(stats);
 			}
 		}
+		catch(HttpResponseException e){
+			LOGGER.log(Level.WARNING, e.getMessage());
+		}
 		catch(IOException | DocumentException e){
 			LOGGER.log(Level.SEVERE, null, e);
 
 			addException(e);
 		}
 		finally{
-			document.close();
+			if(document.isOpen() && getPagesAdded() > 0)
+				document.close();
 		}
 
 		//[s]
@@ -299,12 +309,15 @@ public abstract class AbstractCrawler{
 	protected abstract String extractPage(String url, Document document, PdfWriter writer) throws IOException;
 
 	@SuppressWarnings("SleepWhileInLoop")
-	protected void extractImage(String url, Document document, PdfWriter writer){
+	protected int extractImage(String url, Document document, PdfWriter writer) throws HttpResponseException{
+		int pagesAdded = 0;
 		while(!shutdown){
 			try{
 				byte[] raw = getRawImage(url);
 
 				addImageToDocument(raw, document, writer);
+
+				pagesAdded ++;
 
 				if(downloadType == DownloadType.GO_STRAIGHT){
 					if(currentRequestRetry)
@@ -315,7 +328,9 @@ public abstract class AbstractCrawler{
 				break;
 			}
 			catch(HttpResponseException e){
-//				LOGGER.log(Level.WARNING, e.getMessage());
+				if(e.getStatusCode() == HTTP_STATUS_CODE_BANDWIDTH_LIMIT_EXCEEDED){
+					throw e;
+				}
 
 				addException(e);
 
@@ -343,6 +358,8 @@ public abstract class AbstractCrawler{
 				}
 			}
 		}
+
+		return pagesAdded;
 	}
 
 	@SuppressWarnings("SleepWhileInLoop")
@@ -377,7 +394,7 @@ public abstract class AbstractCrawler{
 
 	private void addException(Exception e){
 		String text = e.getMessage();
-		if(!currentRequestRetry && ("Too Many Requests".equals(text) || "Bandwidth Limit Exceeded".equals(text))){
+		if(!currentRequestRetry && ERROR_TOO_MANY_REQUESTS.equals(text)){
 			currentRequestRetry = true;
 			firstRetry = true;
 		}

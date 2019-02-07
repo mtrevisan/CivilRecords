@@ -52,6 +52,7 @@ public class FSCrawler extends AbstractCrawler{
 
 	private int currentPageIndex;
 	private int totalPages;
+	private int pagesAdded;
 
 	private boolean loggedIn;
 
@@ -68,6 +69,11 @@ public class FSCrawler extends AbstractCrawler{
 	@Override
 	public int getTotalPages(){
 		return totalPages;
+	}
+
+	@Override
+	public int getPagesAdded(){
+		return pagesAdded;
 	}
 
 	@Override
@@ -103,7 +109,7 @@ public class FSCrawler extends AbstractCrawler{
 
 	@Override
 	protected String extractPage(String url, Document document, PdfWriter writer) throws IOException{
-		extractImage(URL_FAMILYSEARCH_IMAGE + url, document, writer);
+		pagesAdded += extractImage(URL_FAMILYSEARCH_IMAGE + url, document, writer);
 
 		return extractNextURL(URL_FAMILYSEARCH_ARCHIVE + url);
 	}

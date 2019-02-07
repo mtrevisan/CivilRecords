@@ -28,6 +28,9 @@ public class SANCrawler extends AbstractCrawler{
 	private static final String URL_SAN_ARCHIVE = URL_SAN + "/v/";
 
 
+	private int pagesAdded;
+
+
 	public SANCrawler(){
 		super(ERROR_WAIT_TIME_DEFAULT);
 	}
@@ -43,6 +46,11 @@ public class SANCrawler extends AbstractCrawler{
 	}
 
 	@Override
+	public int getPagesAdded(){
+		return pagesAdded;
+	}
+
+	@Override
 	@SuppressWarnings("SleepWhileInLoop")
 	protected String extractPage(String url, Document document, PdfWriter writer) throws IOException{
 		String nextURL = null;
@@ -54,7 +62,7 @@ public class SANCrawler extends AbstractCrawler{
 
 				Elements imageLink = doc.select("a.cloud-zoom");
 				String imageURL = (imageLink != null && !imageLink.isEmpty()? imageLink.get(0).absUrl("href"): null);
-				extractImage(imageURL, document, writer);
+				pagesAdded += extractImage(imageURL, document, writer);
 
 				Elements nextLink = doc.select("a.next");
 				nextURL = (nextLink != null && !nextLink.isEmpty()? HttpUtils.cleanURLFromParameters(URL_SAN + nextLink.get(0).attr("href")): null);
