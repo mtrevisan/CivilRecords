@@ -83,6 +83,11 @@ public abstract class AbstractCrawler{
 	private Thread thread;
 	private String username;
 	private String password;
+
+	protected Integer totalPages;
+	protected int currentPageIndex;
+	protected int pagesAdded;
+
 	protected volatile boolean shutdown;
 	protected volatile boolean shutdownBeforeCurrentPage;
 
@@ -96,6 +101,19 @@ public abstract class AbstractCrawler{
 		this.errorWaitTime = errorWaitTime;
 	}
 
+	public void startThread(String archiveURL, Integer totalPages, String outputFilePath){
+		if(thread != null)
+			stopThread();
+
+		this.totalPages = totalPages;
+		shutdown = false;
+		exceptions.clear();
+
+		thread = new Thread(() -> readDocument(archiveURL, outputFilePath));
+
+		thread.start();
+	}
+
 	public void startThread(String archiveURL, String username, String password, String outputFilePath){
 		if(thread != null)
 			stopThread();
@@ -105,23 +123,20 @@ public abstract class AbstractCrawler{
 		shutdown = false;
 		exceptions.clear();
 
-		thread = new Thread(){
-			@Override
-			public void run(){
-				boolean loggedIn = false;
-				try{
-					loggedIn = login(username, password);
-				}
-				catch(IOException e){
-					LOGGER.log(Level.SEVERE, null, e);
-
-					addException(e);
-				}
-
-				if(loggedIn)
-					readDocument(archiveURL, outputFilePath);
+		thread = new Thread(() -> {
+			boolean loggedIn = false;
+			try{
+				loggedIn = login(username, password);
 			}
-		};
+			catch(IOException e){
+				LOGGER.log(Level.SEVERE, null, e);
+
+				addException(e);
+			}
+
+			if(loggedIn)
+				readDocument(archiveURL, outputFilePath);
+		});
 
 		thread.start();
 	}
@@ -140,11 +155,17 @@ public abstract class AbstractCrawler{
 		writeNextURLToDownload(nextURLToDownload);
 	}
 
-	public abstract int getCurrentPageIndex();
+	public int getCurrentPageIndex(){
+		return currentPageIndex;
+	}
 
-	public abstract int getTotalPages();
+	public int getTotalPages(){
+		return totalPages;
+	}
 
-	public abstract int getPagesAdded();
+	public int getPagesAdded(){
+		return pagesAdded;
+	}
 
 	@SuppressWarnings("SleepWhileInLoop")
 	private void readDocument(String archiveURL, String outputFilePath){

@@ -8,6 +8,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import unit731.civilrecords.dict.DictionaryCrawler;
 import unit731.civilrecords.familysearch.FSCrawler;
 import unit731.civilrecords.san.SANCrawler;
 import unit731.civilrecords.services.AbstractCrawler;
@@ -29,6 +30,42 @@ public class Main{
 
 
 	public static void main(String[] args){
+		Options options = new Options();
+		defineOptions(options);
+
+		CommandLineParser parser = new DefaultParser();
+		try{
+			CommandLine cmd = parser.parse(options, args);
+
+			String archiveURL = cmd.getOptionValue("archive");
+			Integer pages = Integer.parseInt(cmd.getOptionValue("pages"));
+
+			String outputFilePath = cmd.getOptionValue("output");
+			AbstractCrawler crawler = new DictionaryCrawler();
+			crawler.startThread(archiveURL, pages, outputFilePath);
+
+			Runtime.getRuntime().addShutdownHook(new Thread(){
+				@Override
+				public void run(){
+					System.out.println(AbstractCrawler.LINE_SEPARATOR + "Crawler shutting down...");
+
+					crawler.stopThread();
+
+					System.out.println("Crawler shutdown complete" + AbstractCrawler.LINE_SEPARATOR);
+				}
+			});
+		}
+		catch(ParseException e){
+			System.out.println(e.getMessage());
+
+			HelpFormatter formatter = new HelpFormatter();
+			formatter.printHelp("CivilRecords", options);
+
+			System.exit(1);
+		}
+	}
+
+	public static void main2(String[] args){
 		Options options = new Options();
 		defineOptions(options);
 
@@ -67,7 +104,7 @@ public class Main{
 			System.out.println(e.getMessage());
 
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("FamilySearch", options);
+			formatter.printHelp("CivilRecords", options);
 
 			System.exit(1);
 		}
@@ -76,7 +113,7 @@ public class Main{
 	private static void defineOptions(Options options) throws IllegalArgumentException{
 		Option opt = new Option("s", "site", true, "site type (ex. FS or SAN)");
 		opt.setRequired(true);
-		options.addOption(opt);
+//		options.addOption(opt);
 
 		opt = new Option("a", "archive", true, "archive URL (ex. 3QSQ-G9WY-C7JD or Archivio+di+Stato+di+Treviso/Stato+civile+napoleonico/Sarmede/Matrimoni/1806/317/005058208_00001.jpg)");
 		opt.setRequired(false);
@@ -92,6 +129,10 @@ public class Main{
 
 		opt = new Option("o", "output", true, "output file (ex. C:\\Users\\mauro\\Downloads\\archive.pdf)");
 		opt.setRequired(true);
+		options.addOption(opt);
+
+		opt = new Option("s", "pages", true, "total number of pages to download");
+		opt.setRequired(false);
 		options.addOption(opt);
 	}
 
