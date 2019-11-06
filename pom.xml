@@ -12,7 +12,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.1.0</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -26,7 +26,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.1.0</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -114,13 +114,13 @@
 		<org.apache.commons.math3.version>3.6.1</org.apache.commons.math3.version>
 		<org.apache.commons.io.version>2.6</org.apache.commons.io.version>
 		<org.apache.commons.cli.version>1.4</org.apache.commons.cli.version>
-		<org.apache.httpcomponents.fluent-hc.version>4.5.8</org.apache.httpcomponents.fluent-hc.version>
+		<org.apache.httpcomponents.fluent-hc.version>4.5.9</org.apache.httpcomponents.fluent-hc.version>
 
 		<!-- ITextPDF -->
 		<com.itextpdf.version>5.5.13</com.itextpdf.version>
 
 		<!-- Jackson -->
-		<com.fasterxml.jackson.version>2.9.9.2</com.fasterxml.jackson.version>
+		<com.fasterxml.jackson.version>2.10.0</com.fasterxml.jackson.version>
 
 		<!-- Jsoup -->
 		<org.jsoup.version>1.11.3</org.jsoup.version>
