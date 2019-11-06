@@ -67,7 +67,9 @@ public abstract class AbstractCrawler{
 	//[ms]
 	public static final int INTERRUPT_WAIT_TIME = 2 * 60_000;
 
-	private DownloadType downloadType = DownloadType.WAIT_EACH;
+	//FIXME to decomment
+//	private DownloadType downloadType = DownloadType.WAIT_EACH;
+	private DownloadType downloadType = DownloadType.GO_STRAIGHT;
 	//[ms]
 	private static final int REQUEST_RETRY_SLEEP = 30_000;
 
@@ -197,7 +199,8 @@ public abstract class AbstractCrawler{
 				double goStraightRemainingTime = DownloadType.GO_STRAIGHT.calculateTotalDownloadTime(remainingPages, downloadSpeed);
 				double waitEachRemainingTime = DownloadType.WAIT_EACH.calculateTotalDownloadTime(remainingPages, downloadSpeed);
 //				DownloadType previousDownloadType = downloadType;
-				downloadType = (goStraightRemainingTime < waitEachRemainingTime? DownloadType.GO_STRAIGHT: DownloadType.WAIT_EACH);
+				//FIXME to decomment
+//				downloadType = (goStraightRemainingTime < waitEachRemainingTime? DownloadType.GO_STRAIGHT: DownloadType.WAIT_EACH);
 				currentRequestRetry = false;
 //				if(previousDownloadType != downloadType)
 //					System.out.format(LINE_SEPARATOR + "Change download type to %s, remaining time is %.1f s" + LINE_SEPARATOR, downloadType, downloadType.calculateTotalDownloadTime(remainingPages, downloadSpeed));
