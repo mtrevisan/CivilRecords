@@ -61,8 +61,8 @@ rem Zanette*Dizionario del dialetto di Vittorio*.pdf
 rem 1948
 rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a 3Q9M-CSGG-Y4YV-9 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Araraquara death 197104-197106.pdf"
 rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a 3Q9M-CSFH-LSZZ-7 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa death 194801-194905.pdf"
-java -jar dist/CivilRecords-2.3.0.jar -s FS -a 3Q9M-CSH2-CX5N -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Quintana birth 194011-194102.pdf"
-java -jar dist/CivilRecords-2.3.0.jar -s FS -a 3Q9M-CS6C-5W12 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Quintana birth 194005-194008.pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a 3Q9M-CSH2-CX5N -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Quintana birth 194011-194102.pdf"
+rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a 3Q9M-CS6C-5W12 -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Quintana birth 194005-194008.pdf"
 rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Quintana birth .pdf"
 rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Quintana birth .pdf"
 rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Quintana birth .pdf"
@@ -87,3 +87,22 @@ rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C
 rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
 rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
 rem java -jar dist/CivilRecords-2.3.0.jar -s FS -a  -u abcdef3 -p fermi123 -o "C:\Users\mauro\Downloads\Mococa birth .pdf"
+
+rem "C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -jar dist/CivilRecords-2.4.0.jar -s SAN -a Archivio+di+Stato+di+Padova/Stato+civile+napoleonico/Scandolaraprovincia+di+Treviso/Nati/1807/274/007524007_00002.jpg.html -o "C:\Users\mauro\Downloads\Scandolara birth 1807.pdf"
+
+rem next: Morgano https://www.familysearch.org/search/catalog/2387888?availability=Family%20History%20Library
+rem "C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -jar dist/CivilRecords-2.4.0.jar -s FS -u abcdef3 -p fermi123 -a 33S7-81WJ-CR9 -o "C:\Users\mauro\Downloads\Morgano birth 1876.pdf"
+rem "C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -jar dist/CivilRecords-2.4.0.jar -s FS -u abcdef3 -p fermi123 -a 33S7-L1WJ-92M -o "C:\Users\mauro\Downloads\Morgano birth 1885-1889.pdf"
+rem "C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -jar dist/CivilRecords-2.4.0.jar -s FS -u abcdef3 -p fermi123 -a 33SQ-G1WJ-7YT -o "C:\Users\mauro\Downloads\Morgano birth 1903-1905, 1908-1914.pdf"
+rem "C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -jar dist/CivilRecords-2.4.0.jar -s FS -u abcdef3 -p fermi123 -a 33S7-81WJ-WFY -o "C:\Users\mauro\Downloads\Morgano birth 1920, 1922-1924, 1926-1930.pdf"
+rem "C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -jar dist/CivilRecords-2.4.0.jar -s FS -u abcdef3 -p fermi123 -a 33S7-81WJ-WD7 -o "C:\Users\mauro\Downloads\Morgano birth 1921, 1940-1941.pdf"
+rem "C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -jar dist/CivilRecords-2.4.0.jar -s FS -u abcdef3 -p fermi123 -a 33S7-L1WJ-8JK -o "C:\Users\mauro\Downloads\Morgano birth 1931-1939.pdf"
+
+rem Zero https://www.familysearch.org/search/catalog/2387911?availability=Family%20History%20Library
+rem "C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -jar dist/CivilRecords-2.4.0.jar -s FS -u abcdef3 -p fermi123 -a 3QS7-L99S-N8D7 -o "C:\Users\mauro\Downloads\Zero death 1922-1931 index.pdf"
+rem "C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -jar dist/CivilRecords-2.4.0.jar -s FS -u abcdef3 -p fermi123 -a 3QS7-8995-L9Z7-B -o "C:\Users\mauro\Downloads\Zero marriage 1922-1931 index.pdf"
+rem "C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -jar dist/CivilRecords-2.4.0.jar -s FS -u abcdef3 -p fermi123 -a 3QSQ-G99C-Y2Y -o "C:\Users\mauro\Downloads\Zero bann 1871-1879.pdf"
+rem "C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -jar dist/CivilRecords-2.4.0.jar -s FS -u abcdef3 -p fermi123 -a 3QS7-8995-L9FK-V -o "C:\Users\mauro\Downloads\Zero bann 1881-1893, 1895-1897.pdf"
+rem "C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -jar dist/CivilRecords-2.4.0.jar -s FS -u abcdef3 -p fermi123 -a 3QS7-L995-L9FP-G -o "C:\Users\mauro\Downloads\Zero bann 1912-1916, 1918-1920, 1922.pdf"
+rem "C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -jar dist/CivilRecords-2.4.0.jar -s FS -u abcdef3 -p fermi123 -a 3QS7-L995-L96H-P -o "C:\Users\mauro\Downloads\Zero bann 1923-1930.pdf"
+rem "C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -jar dist/CivilRecords-2.4.0.jar -s FS -u abcdef3 -p fermi123 -a 3QSQ-G995-L9JY-P -o "C:\Users\mauro\Downloads\Zero bann 1931-1939.pdf"
