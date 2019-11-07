@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+//http://collezioni.comune.belluno.it/greenstone/cgi-bin/library.cgi?e=d-01000-00---off-0bibstori--00-1----0-10-0---0---0direct-10--TI--4-------0-1l--11-en-50---20-about-vocabolario--00-3-1-00-00--4--0--0-0-11-10-0utfZz-8-00&a=q
 public class DictionaryCrawler extends AbstractCrawler{
 
 	//[ms]
