@@ -35,7 +35,7 @@ public abstract class AbstractCrawler{
 
 	private static final Logger LOGGER = Logger.getLogger(AbstractCrawler.class.getName());
 
-	private static enum DownloadType{
+	private enum DownloadType{
 		WAIT_EACH(10_000),
 		GO_STRAIGHT(0);
 

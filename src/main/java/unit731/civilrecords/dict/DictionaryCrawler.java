@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
 //http://collezioni.comune.belluno.it/greenstone/cgi-bin/library.cgi?e=d-01000-00---off-0bibstori--00-1----0-10-0---0---0direct-10--TI--4-------0-1l--11-en-50---20-about-vocabolario--00-3-1-00-00--4--0--0-0-11-10-0utfZz-8-00&a=q
 /*
 TO DO next:
--a "http://collezioni.comune.belluno.it/greenstone/collect/bibstori/index/assoc/HASHe255.dir/ms891_2_0002.jpg" -o "D:\Mauro\dictionaries used\Vienna, Carlo. Vocabolario bellunese-italiano\Vienna, Carlo. Vocabolario bellunese-italiano G-R [1844-1855].pdf" -s 809
 -a "http://collezioni.comune.belluno.it/greenstone/collect/bibstori/index/assoc/HASH4e90.dir/ms891_3_0002.jpg" -o "D:\Mauro\dictionaries used\Vienna, Carlo. Vocabolario bellunese-italiano\Vienna, Carlo. Vocabolario bellunese-italiano S-Z [1844-1855].pdf" -s 763
 */
 public class DictionaryCrawler extends AbstractCrawler{
