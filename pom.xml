@@ -123,7 +123,7 @@
 		<com.fasterxml.jackson.version>2.11.0</com.fasterxml.jackson.version>
 
 		<!-- Jsoup -->
-		<org.jsoup.version>1.11.3</org.jsoup.version>
+		<org.jsoup.version>1.15.3</org.jsoup.version>
 
 		<!-- Logging -->
 		<!--<ch.qos.logback.version>1.2.3</ch.qos.logback.version>-->
