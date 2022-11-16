@@ -120,7 +120,7 @@
 		<com.itextpdf.version>5.5.13</com.itextpdf.version>
 
 		<!-- Jackson -->
-		<com.fasterxml.jackson.version>2.11.0</com.fasterxml.jackson.version>
+		<com.fasterxml.jackson.version>2.12.7.1</com.fasterxml.jackson.version>
 
 		<!-- Jsoup -->
 		<org.jsoup.version>1.11.3</org.jsoup.version>
