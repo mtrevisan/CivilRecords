@@ -117,7 +117,7 @@
 		<org.apache.httpcomponents.fluent-hc.version>4.5.10</org.apache.httpcomponents.fluent-hc.version>
 
 		<!-- ITextPDF -->
-		<com.itextpdf.version>5.5.13</com.itextpdf.version>
+		<com.itextpdf.version>5.5.13.3</com.itextpdf.version>
 
 		<!-- Jackson -->
 		<com.fasterxml.jackson.version>2.11.0</com.fasterxml.jackson.version>
